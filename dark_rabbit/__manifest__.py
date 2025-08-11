@@ -1,0 +1,25 @@
+{
+    "name": "Dark Rabbit",
+    "version": "18.0.0.1.0",
+    "author": "Center of Research and Development",
+    "website": "https://crnd.pro",
+    "license": "LGPL-3",
+    "summary": "Just a rabbit from the Dark Side. Offers some dark magic.",
+    'category': 'Technical Settings',
+    'depends': [
+        'generic_background_service',
+        'generic_mixin',
+    ],
+    'demo': [],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/menu.xml',
+        'views/connection.xml',
+        'views/queue.xml',
+        'views/handler.xml',
+        'views/event.xml',
+    ],
+    'images': ['static/description/banner.png'],
+    'installable': True,
+    'auto_install': False,
+}

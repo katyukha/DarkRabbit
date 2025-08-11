@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dark_rabbit_connection,dark_rabbit_connection,model_dark_rabbit_connection,base.group_system,1,1,1,1
+access_dark_rabbit_queue,dark_rabbit_queue,model_dark_rabbit_queue,base.group_system,1,1,1,1
+access_dark_rabbit_queue_binding,dark_rabbit_queue_binding,model_dark_rabbit_queue_binding,base.group_system,1,1,1,1
+access_dark_rabbit_event,dark_rabbit_event,model_dark_rabbit_event,base.group_system,1,1,1,1
+access_dark_rabbit_handler,dark_rabbit_handler,model_dark_rabbit_handler,base.group_system,1,1,0,0
+

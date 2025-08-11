@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="Dark Rabbit"
+              id="menu_dark_rabbit_root"
+              sequence="100"
+              parent="base.menu_custom"/>
+
+</odoo>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dark_rabbit_queue_tree" model="ir.ui.view">
+        <field name="model">dark.rabbit.queue</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="connection_id"/>
+                <field name="queue_name"/>
+                <field name="handler_id"/>
+                <field name="listen"/>
+                <field name="active"/>
+                <field name="event_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dark_rabbit_queue_form" model="ir.ui.view">
+        <field name="model">dark.rabbit.queue</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_events"
+                                type="object"
+                                class="oe_stat_button">
+                            <field string="Events"
+                                   name="event_count"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+                    <field name="active" invisible="1"/>
+                    <widget name="web_ribbon" title="Archived"
+                            bg_color="bg-danger"
+                            invisible="active == True" />
+                    <group>
+                        <group>
+                            <field name="connection_id"/>
+                            <field name="queue_name"/>
+                        </group>
+                        <group name="group_declare" string="Declare">
+                            <field name="queue_declare"/>
+                            <field name="queue_declare_exclusive" invisible="not queue_declare"/>
+                            <field name="queue_declare_durable" invisible="not queue_declare"/>
+                            <field name="queue_declare_auto_delete" invisible="not queue_declare"/>
+
+                        </group>
+                        <group name="group_listen" string="Listen">
+                            <field name="listen"/>
+                            <field name="listen_exclusive" invisible="not listen"/>
+                            <separator colspan="2" string="Bindings" invisible="not listen"/>
+                            <field name="queue_binding_ids" mode="list" nolabel="1" invisible="not listen">
+                                <list editable="bottom">
+                                    <field name="exchange_name"/>
+                                    <field name="routing_key"/>
+                                </list>
+                            </field>
+                        </group>
+                        <group name="group_handler" string="Handler">
+                            <field name="handler_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dark_rabbit_queue_list" model="ir.actions.act_window">
+        <field name="name">Dark Rabbit Queue</field>
+        <field name="res_model">dark.rabbit.queue</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem action="action_dark_rabbit_queue_list"
+              id="menu_dark_rabbit_queue"
+              sequence="20"
+              parent="dark_rabbit.menu_dark_rabbit_root"/>
+
+</odoo>
+

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dark_rabbit_connection_tree" model="ir.ui.view">
+        <field name="model">dark.rabbit.connection</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="host"/>
+                <field name="port"/>
+                <field name="virtual_host"/>
+                <field name="user"/>
+                <field name="active"/>
+                <field name="queue_count"/>
+                <field name="event_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dark_rabbit_connection_form" model="ir.ui.view">
+        <field name="model">dark.rabbit.connection</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_test_connection"
+                            type="object"
+                            class="oe_highlight"
+                            string="Test Connection"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_queues"
+                                type="object"
+                                class="oe_stat_button">
+                            <field string="Queues"
+                                   name="queue_count"
+                                   widget="statinfo"/>
+                        </button>
+                        <button name="action_view_events"
+                                type="object"
+                                class="oe_stat_button">
+                            <field string="Events"
+                                   name="event_count"
+                                   widget="statinfo"/>
+                        </button>
+                    </div>
+                    <!-- TODO: Add stat button to display active consumers -->
+                    <field name="active" invisible="1"/>
+                    <widget name="web_ribbon" title="Archived"
+                            bg_color="bg-danger"
+                            invisible="active == True" />
+                    <div class="oe_title">
+                        <field name="name" nolabel="1" placeholder="Connection name..."/>
+                        <field name="code" nolabel="1" placeholder="Connection code..."/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="host"/>
+                            <field name="port"/>
+                            <field name="virtual_host"/>
+                        </group>
+                        <group>
+                            <field name="user"/>
+                            <field name="password" password="True"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dark_rabbit_connection_list" model="ir.actions.act_window">
+        <field name="name">Dark Rabbit Connection</field>
+        <field name="res_model">dark.rabbit.connection</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem action="action_dark_rabbit_connection_list"
+              id="menu_dark_rabbit_connection"
+              sequence="10"
+              parent="dark_rabbit.menu_dark_rabbit_root"/>
+
+</odoo>
+
