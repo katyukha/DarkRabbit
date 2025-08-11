@@ -1,12 +1,8 @@
-import threading
 import logging
-import collections
 import time
 
-from odoo.addons.generic_background_service import (
-    AbstractBackgroundServiceWorker,
-)
 from odoo.addons.dark_rabbit.tools.dark_consumer import DarkRabbitConsumer
+from odoo.addons.generic_background_service import AbstractBackgroundServiceWorker
 
 _logger = logging.getLogger(__name__)
 
@@ -19,11 +15,11 @@ POLLING_CYCLE_INTERVAL = 0.3  # seconds
 
 
 class DarkRabbitWorker(AbstractBackgroundServiceWorker):
-    """ This class represents service worker for single database.
+    """This class represents service worker for single database.
 
-        It is responsible for reading info about connections,
-        and spawning rabbit consumers in separate threads for each
-        'dark.rabbit.connection'.
+    It is responsible for reading info about connections,
+    and spawning rabbit consumers in separate threads for each
+    'dark.rabbit.connection'.
     """
 
     def __init__(self, *args, **kwargs):
@@ -47,9 +43,11 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
         with self.with_env() as env:
             connections_map = {
                 c.id: c.get_consumer_config()
-                for c in env['dark.rabbit.connection'].search([
-                    ('queue_ids.listen', '=', True),
-                ])
+                for c in env["dark.rabbit.connection"].search(
+                    [
+                        ("queue_ids.listen", "=", True),
+                    ]
+                )
             }
 
         # Stop consumers that are not in active connections
@@ -89,7 +87,9 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
                     callback_on_message=self._on_message,
                 )
             except Exception:
-                _logger.error("Cannot spawn consumer for connection %s", conn_id, exc_info=True)
+                _logger.error(
+                    "Cannot spawn consumer for connection %s", conn_id, exc_info=True
+                )
                 continue
 
             self._consumer_registry[conn_id] = consumer
@@ -101,11 +101,14 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
 
     def _on_message(self, message):
         with self.with_env() as env:
-            env['dark.rabbit.event'].handle_message(message)
+            env["dark.rabbit.event"].handle_message(message)
 
     def run_service(self):
         # Reload consumers if needed
-        if self._reload_timestamp and time.time() - self._reload_timestamp > RELOAD_PERIOD:
+        if (
+            self._reload_timestamp
+            and time.time() - self._reload_timestamp > RELOAD_PERIOD
+        ):
             self.reload_consumers()
 
         for conn_id, consumer in self._consumer_registry.items():
@@ -123,7 +126,9 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
             try:
                 consumer.poll_events()
             except ValueError as e:
-                _logger.error("Error while polling events (conn_id=%s)", conn_id, exc_info=True)
+                _logger.error(
+                    "Error while polling events (conn_id=%s)", conn_id, exc_info=True
+                )
                 if str(e) == "Timeout closed before call":
                     # It seems that connection was closed, so in this case we
                     # just schedule connection reload
@@ -132,5 +137,7 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
                 else:
                     raise
             except Exception:
-                _logger.error("Error while polling events (conn_id=%s)", conn_id, exc_info=True)
+                _logger.error(
+                    "Error while polling events (conn_id=%s)", conn_id, exc_info=True
+                )
                 raise

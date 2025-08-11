@@ -1,0 +1,128 @@
+name: Tests
+on:
+  push:
+    branches:
+      - '18.0-*'
+
+jobs:
+  lint-checks:
+    name: Precommit + check_versions
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    container:
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.4.4
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Link addons
+        run: odood --config-from-env addons link .
+
+      - name: Add dependencies
+        run: odood --config-from-env addons add --single-branch --odoo-requirements ./odoo_requirements.txt
+
+      - name: Add current directory as safe directory for git
+        run: |
+          git config --global --add safe.directory "$(pwd)"
+
+      - name: Check versions
+        run: |
+          odood repo check-versions --ignore-translations
+
+      - name: Install pre-commit
+        run:
+          odood pre-commit set-up
+
+      - name: Run pre-commit
+        run: |
+          odood pre-commit run
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    needs:
+      - lint-checks
+    strategy:
+      fail-fast: true
+    container:
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.4.4
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_USER: odoo
+          POSTGRES_DB: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ODOOD_OPT_DB_HOST: postgres
+      ODOOD_OPT_DB_USER: odoo
+      ODOOD_OPT_DB_PASSWORD: odoo
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Link addons
+        run: odood --config-from-env addons link .
+
+      - name: Add dependencies
+        run: odood --config-from-env addons add --single-branch --odoo-requirements ./odoo_requirements.txt
+
+      - name: Add current directory as safe directory for git
+        run: |
+          git config --global --add safe.directory "$(pwd)"
+
+      - name: Run tests
+        run: odood --config-from-env test -t --dir .
+
+  migration-tests:
+    name: Migration Tests
+    runs-on: ubuntu-latest
+    needs:
+      - lint-checks
+    strategy:
+      fail-fast: true
+    container:
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.4.4
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_USER: odoo
+          POSTGRES_DB: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      ODOOD_OPT_DB_HOST: postgres
+      ODOOD_OPT_DB_USER: odoo
+      ODOOD_OPT_DB_PASSWORD: odoo
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Link addons
+        run: odood --config-from-env addons link .
+
+      - name: Add dependencies
+        run: odood --config-from-env addons add --single-branch --odoo-requirements ./odoo_requirements.txt
+
+      - name: Add current directory as safe directory for git
+        run: |
+          git config --global --add safe.directory "$(pwd)"
+
+      - name: Run tests
+        run: odood --config-from-env test -t --migration --dir .

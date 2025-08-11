@@ -1,0 +1,2 @@
+--github crnd-inc/generic-addons
+--github crnd-inc/generic-background-service

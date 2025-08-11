@@ -18,6 +18,12 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_retry_handle"
+                            type="object"
+                            string="Retry handle"
+                            class="oe_highlight"
+                            icon="fa-refresh"
+                            invisible="not error"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box" />
@@ -32,7 +38,8 @@
                             <field name="routing_key"/>
                         </group>
                         <group colspan="2" string="Body">
-                            <field name="body" nolabel="1" colspan="2"/>
+                            <field name="body" nolabel="1" colspan="2" invisible="body_json_pretty"/>
+                            <field name="body_json_pretty" nolabel="1" colspan="2" invisible="not body_json_pretty" widget="code" options="{'mode': 'javascript'}"/>
                         </group>
                         <group colspan="2" string="Error info" invisible="not error">
                             <field name="error"/>
@@ -56,5 +63,3 @@
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>
-
-

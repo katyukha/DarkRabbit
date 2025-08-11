@@ -1,15 +1,15 @@
-from odoo import models, fields, api
+from odoo import fields, models
 
 
 class DarkRabbitQueue(models.Model):
-    """ This model represents RabbitMQ queue
-    """
-    _name = 'dark.rabbit.queue.binding'
-    _description = 'Dark Rabbit: Queue Binding'
-    _order = 'queue_id, exchange_name, routing_key'
+    """This model represents RabbitMQ queue"""
+
+    _name = "dark.rabbit.queue.binding"
+    _description = "Dark Rabbit: Queue Binding"
+    _order = "queue_id, exchange_name, routing_key"
 
     queue_id = fields.Many2one(
-        comodel_name='dark.rabbit.queue',
+        comodel_name="dark.rabbit.queue",
         required=True,
         index=True,
     )

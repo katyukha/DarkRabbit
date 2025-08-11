@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_server_retry_handler"
+            model="ir.actions.server">
+        <field name="name">Dark Rabbit Event: Retry Handler</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="dark_rabbit.model_dark_rabbit_event"/>
+        <field name="binding_type">action</field>
+        <field name="binding_model_id" ref="dark_rabbit.model_dark_rabbit_event" />
+        <field name="state">code</field>
+        <field name="code">records.action_retry_handle()</field>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+    </record>
+</odoo>

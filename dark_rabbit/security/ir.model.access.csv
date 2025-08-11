@@ -4,4 +4,3 @@ access_dark_rabbit_queue,dark_rabbit_queue,model_dark_rabbit_queue,base.group_sy
 access_dark_rabbit_queue_binding,dark_rabbit_queue_binding,model_dark_rabbit_queue_binding,base.group_system,1,1,1,1
 access_dark_rabbit_event,dark_rabbit_event,model_dark_rabbit_event,base.group_system,1,1,1,1
 access_dark_rabbit_handler,dark_rabbit_handler,model_dark_rabbit_handler,base.group_system,1,1,0,0
-
