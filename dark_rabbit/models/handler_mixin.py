@@ -16,13 +16,14 @@ class DarkRabbitHandlerMixin(models.AbstractModel):
             # Do not look for handlers on abstract models
             return res
 
-        hmodel_id = self.sudo().env["ir.model"]._get(self._name).id
-        handler_rows = []
-        for method_name, handler_name in find_dark_rabbit_handlers(cls):
-            handler_rows += [(hmodel_id, method_name, handler_name)]
-
         @self.pool.post_init
         def _register_dark_rabbit_handlers():
+
+            hmodel_id = self.sudo().env["ir.model"]._get(self._name).id
+            handler_rows = []
+            for method_name, handler_name in find_dark_rabbit_handlers(cls):
+                handler_rows += [(hmodel_id, method_name, handler_name)]
+
             self.env.cr.execute(
                 tools.SQL(
                     (
