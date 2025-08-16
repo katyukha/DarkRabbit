@@ -9,6 +9,7 @@ _logger = logging.getLogger(__name__)
 
 class DarkRabbitEvent(models.Model):
     _name = "dark.rabbit.event"
+    _description = "Dark Rabbit: Event"
     _order = "create_date DESC"
 
     create_date = fields.Datetime(required=True, index=True)

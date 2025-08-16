@@ -51,6 +51,67 @@
         </field>
     </record>
 
+    <record id="view_dark_rabbit_event_search" model="ir.ui.view">
+        <field name="model">dark.rabbit.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="create_date"/>
+                <field name="routing_key"/>
+                <field name="connection_id" />
+                <field name="queue_id"/>
+                <field name="handler_id"/>
+
+                <filter name="filter_with_error"
+                        string="Error"
+                        domain="[('error', '=', True)]"/>
+                <filter name="filter_without_error"
+                        string="No error"
+                        domain="[('error', '=', False)]"/>
+                <separator/>
+                <filter name="filter_with_handler"
+                        string="With handler"
+                        domain="[('handler_id', '!=', False)]"/>
+                <filter name="filter_without_handler"
+                        string="Without handler"
+                        domain="[('handler_id', '=', False)]"/>
+                <separator/>
+
+                <group expand="1" string="Group By">
+                    <filter
+                        string="Date"
+                        name="group_by_create_date"
+                        context="{'group_by':'create_date'}"
+                    />
+                    <filter
+                        string="Connection"
+                        name="group_by_connection_id"
+                        context="{'group_by':'connection_id'}"
+                    />
+                    <filter
+                        string="Queue"
+                        name="group_by_queue_id"
+                        context="{'group_by':'queue_id'}"
+                    />
+                    <filter
+                        string="Handler"
+                        name="group_by_handler_id"
+                        context="{'group_by':'handler_id'}"
+                    />
+                    <filter
+                        string="Error"
+                        name="group_by_error"
+                        context="{'group_by':'error'}"
+                    />
+                </group>
+
+                <searchpanel view_types="list,pivot,graph">
+                    <field name="connection_id" string="Connection" select="multi"/>
+                    <field name="queue_id" string="Queue" select="multi"/>
+                    <field name="handler_id" string="Queue" select="multi"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
     <record id="action_dark_rabbit_event_list" model="ir.actions.act_window">
         <field name="name">Dark Rabbit Event</field>
         <field name="res_model">dark.rabbit.event</field>
