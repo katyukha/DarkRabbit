@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 RELOAD_PERIOD = 2  # seconds
 
 # POLLING_CYCLE_INTERVAL represents the timeout between event polling cycles
-POLLING_CYCLE_INTERVAL = 0.3  # seconds
+POLLING_CYCLE_INTERVAL = 10  # seconds
 
 
 class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):

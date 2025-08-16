@@ -21,9 +21,6 @@ class DarkRabbitConnection(models.Model):
     ]
     _order = "name"
 
-    name = fields.Char(required=True, index=True)
-    code = fields.Char()
-
     host = fields.Char(required=True)
     port = fields.Integer(default=5672, required=True)
     virtual_host = fields.Char(default="/", required=True)
