@@ -19,6 +19,7 @@
         "views/handler.xml",
         "views/event.xml",
         "data/ir_actions_server.xml",
+        "data/outgoing_event_type.xml",
     ],
     "images": ["static/description/icon.png"],
     "installable": True,
