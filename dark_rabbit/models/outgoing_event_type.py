@@ -6,6 +6,8 @@ class DarkRabbitOutgoingEventType(models.Model):
 
     _inherit = ["generic.mixin.name_with_code", "generic.mixin.uniq_name_code"]
 
+    sequence = fields.Integer(index=True)
+
     outgoing_routing_ids = fields.One2many(
         comodel_name="dark.rabbit.outgoing.routing",
         inverse_name="outgoing_event_type_id",
