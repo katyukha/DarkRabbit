@@ -4,7 +4,7 @@
     "author": "Center of Research and Development",
     "website": "https://crnd.pro",
     "license": "LGPL-3",
-    "summary": "Rabbit from the Dark Side can to receive and deliver your messages.",
+    "summary": "Rabbit from Dark Side. Brings some dark magic to your messaging.",
     "category": "Technical Settings",
     "depends": [
         "generic_background_service",
@@ -20,7 +20,7 @@
         "views/event.xml",
         "data/ir_actions_server.xml",
     ],
-    "images": ["static/description/banner.png"],
+    "images": ["static/description/icon.png"],
     "installable": True,
     "auto_install": False,
 }
