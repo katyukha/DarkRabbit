@@ -18,6 +18,7 @@
         "views/queue.xml",
         "views/handler.xml",
         "views/event.xml",
+        "views/outgoing_routing.xml",
         "data/ir_actions_server.xml",
         "data/outgoing_event_type.xml",
     ],
