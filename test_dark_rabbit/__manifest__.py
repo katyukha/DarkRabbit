@@ -11,6 +11,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/test_dark_rabbit_handler.xml",
+        "views/test_dark_rabbit_outgoing_event.xml",
     ],
     "demo": [],
     "images": ["static/description/banner.png"],
