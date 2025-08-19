@@ -111,6 +111,9 @@ class DarkRabbitConnection(models.Model):
                         exchange=event.exchange,
                         routing_key=event.routing_key,
                         body=event.body,
+                        properties=pika.BasicProperties(
+                            delivery_mode=pika.DeliveryMode.Persistent
+                        ),
                     )
                 except Exception as exc:
                     event.write(
