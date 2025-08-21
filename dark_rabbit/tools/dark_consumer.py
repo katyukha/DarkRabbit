@@ -167,6 +167,9 @@ class DarkRabbitConsumer:
         except Exception:
             _logger.error("Cannot process message %s", message, exc_info=True)
             message.nack()
+            # TODO: Compute fail rate, and if fail rate reaches dangerous
+            # values (more than 5 seconds), then nack without requeue.
+            # Possibly suspend consumer for some period of time.
         else:
             message.ack()
 

@@ -147,8 +147,7 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
                     # just schedule connection reload
                     consumer.schedule_reload()
                     continue
-                else:
-                    raise
+                raise
             except Exception:
                 _logger.error(
                     "Error while polling events (conn_id=%s)", conn_id, exc_info=True
