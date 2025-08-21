@@ -30,6 +30,9 @@ class DarkRabbitQueue(models.Model):
         string="Queue auto-delete",
         help="Automatically delete queue after consumer cancels or disconnects",
     )
+    queue_declare_dlx = fields.Char("Declare Dead Letter Exchange")
+    queue_declare_dlq = fields.Char("Declare Dead Letter Queue")
+    queue_declare_dlq_routing = fields.Char("Declare DLQ Routing")
 
     queue_binding_ids = fields.One2many(
         comodel_name="dark.rabbit.queue.binding",
@@ -64,6 +67,9 @@ class DarkRabbitQueue(models.Model):
                 "durable": self.queue_declare_durable,
                 "exclusive": self.listen_exclusive,
                 "auto_delete": self.queue_declare_auto_delete,
+                "dlx": self.queue_declare_dlx,
+                "dlq": self.queue_declare_dlq,
+                "dlq_routing": self.queue_declare_dlq_routing,
             }
             if self.queue_declare
             else False,

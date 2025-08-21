@@ -44,7 +44,9 @@
                             <field name="queue_declare_exclusive" invisible="not queue_declare"/>
                             <field name="queue_declare_durable" invisible="not queue_declare"/>
                             <field name="queue_declare_auto_delete" invisible="not queue_declare"/>
-
+                            <field name="queue_declare_dlx" invisible="not queue_declare"/>
+                            <field name="queue_declare_dlq" invisible="not queue_declare"/>
+                            <field name="queue_declare_dlq_routing" invisible="not queue_declare"/>
                         </group>
                         <group name="group_listen" string="Listen">
                             <field name="listen"/>
