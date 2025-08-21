@@ -1,6 +1,8 @@
 import logging
 import time
 
+import psycopg2
+
 from odoo.addons.dark_rabbit.tools.dark_consumer import DarkRabbitConsumer
 from odoo.addons.generic_background_service import AbstractBackgroundServiceWorker
 
@@ -39,7 +41,7 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
         # We have to reload consumers on init
         self.reload_consumers()
 
-    def reload_consumers(self):
+    def _get_consumer_config(self):
         with self.with_env() as env:
             connections_map = {
                 c.id: c.get_consumer_config()
@@ -49,6 +51,17 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
                     ]
                 )
             }
+        return connections_map
+
+    def reload_consumers(self):
+        try:
+            connections_map = self._get_consumer_config()
+        except psycopg2.OperationalError:
+            _logger.warning(
+                "Cannot obtain consumer configuration. Possibly postgresql is not accessible. "
+                "Shutting down all consumers."
+            )
+            connections_map = {}
 
         # Stop consumers that are not in active connections
         stop_connection_ids = [
@@ -134,8 +147,7 @@ class DarkRabbitWorker(AbstractBackgroundServiceWorker):
                     # just schedule connection reload
                     consumer.schedule_reload()
                     continue
-                else:
-                    raise
+                raise
             except Exception:
                 _logger.error(
                     "Error while polling events (conn_id=%s)", conn_id, exc_info=True

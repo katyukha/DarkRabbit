@@ -84,11 +84,29 @@ class DarkRabbitConsumer:
         # Configure listening on specified queues
         for queue_config in self._config["listen_queues"]:
             if declare := queue_config.get("queue_declare"):
+                arguments = {}
+                if declare_dlx := declare.get("dlx"):
+                    self.channel.exchange_declare(
+                        exchange=declare_dlx,
+                        exchange_type="direct",
+                        durable=True,
+                    )
+                    arguments["x-dead-letter-exchange"] = declare_dlx
+                if declare_dlq := declare.get("dlq"):
+                    self.channel.queue_declare(queue=declare_dlq, durable=True)
+                    self.channel.queue_bind(
+                        queue=declare["dlq"],
+                        exchange=declare["dlx"],
+                        routing_key=declare["dlq_routing"],
+                    )
+                    arguments["x-dead-letter-routing-key"] = declare["dlq_routing"]
+
                 self.channel.queue_declare(
                     queue=queue_config["queue_name"],
                     durable=declare["durable"],
                     exclusive=declare["exclusive"],
                     auto_delete=declare["auto_delete"],
+                    arguments=arguments if arguments else None,
                 )
 
             for binding in queue_config.get("bindings", []):
@@ -149,6 +167,9 @@ class DarkRabbitConsumer:
         except Exception:
             _logger.error("Cannot process message %s", message, exc_info=True)
             message.nack()
+            # TODO: Compute fail rate, and if fail rate reaches dangerous
+            # values (more than 5 seconds), then nack without requeue.
+            # Possibly suspend consumer for some period of time.
         else:
             message.ack()
 
