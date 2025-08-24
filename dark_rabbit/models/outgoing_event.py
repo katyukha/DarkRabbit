@@ -23,7 +23,7 @@ class DarkRabbitOutgoingEvent(models.Model):
     error = fields.Boolean(readonly=True)
     error_msg = fields.Text(readonly=True)
 
-    creted_at = fields.Datetime(string="Creation date", automatic=True, readonly=True)
+    created_at = fields.Datetime(string="Creation date", automatic=True, readonly=True)
 
     def add(self, e_type, body):
         event_type = self.env["dark.rabbit.outgoing.event.type"].search(

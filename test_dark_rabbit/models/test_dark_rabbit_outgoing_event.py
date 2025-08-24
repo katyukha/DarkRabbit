@@ -12,16 +12,16 @@ class TestDarkRabbitOutgoingEvent(models.Model):
 
         records = super().create(vals)
         for rec in records:
-            self.env["dark.rabbit.outgoing.event"].add("fa-flight-created", rec.body)
+            self.env["dark.rabbit.outgoing.event"].add("test-flight-created", rec.body)
         return records
 
     def write(self, vals):
         records = super().write(vals)
         for rec in self:
-            self.env["dark.rabbit.outgoing.event"].add("fa-flight-updated", rec.body)
+            self.env["dark.rabbit.outgoing.event"].add("test-flight-updated", rec.body)
         return records
 
     def unlink(self):
         for rec in self:
-            self.env["dark.rabbit.outgoing.event"].add("fa-flight-deleted", rec.body)
+            self.env["dark.rabbit.outgoing.event"].add("test-flight-deleted", rec.body)
         return super().unlink()

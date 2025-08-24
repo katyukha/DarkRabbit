@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odoo noupdate="0">
+<odoo>
     <record model="dark.rabbit.outgoing.event.type" id="outgoing_event_type_created">
-        <field name="code">fa-flight-created</field>
+        <field name="code">test-flight-created</field>
         <field name="name">Створено</field>
         <field name="sequence">10</field>
     </record>
     <record model="dark.rabbit.outgoing.event.type" id="outgoing_event_type_updated">
-        <field name="code">fa-flight-updated</field>
+        <field name="code">test-flight-updated</field>
         <field name="name">Оновлено</field>
         <field name="sequence">20</field>
     </record>
     <record model="dark.rabbit.outgoing.event.type" id="outgoing_event_type_deleted">
-        <field name="code">fa-flight-deleted</field>
+        <field name="code">test-flight-deleted</field>
         <field name="name">Видалено</field>
         <field name="sequence">30</field>
     </record>
