@@ -120,7 +120,7 @@
 
     <menuitem action="action_dark_rabbit_event_list"
               id="menu_dark_rabbit_event"
-              sequence="30"
+              sequence="50"
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>

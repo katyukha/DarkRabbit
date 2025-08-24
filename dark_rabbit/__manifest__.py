@@ -1,6 +1,6 @@
 {
     "name": "Dark Rabbit",
-    "version": "18.0.0.1.5",
+    "version": "18.0.0.1.6",
     "author": "Center of Research and Development",
     "website": "https://crnd.pro",
     "license": "LGPL-3",
@@ -18,6 +18,7 @@
         "views/queue.xml",
         "views/handler.xml",
         "views/event.xml",
+        "views/outgoing_routing.xml",
         "data/ir_actions_server.xml",
     ],
     "images": ["static/description/icon.png"],

@@ -76,7 +76,7 @@
 
     <menuitem action="action_dark_rabbit_queue_list"
               id="menu_dark_rabbit_queue"
-              sequence="20"
+              sequence="40"
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>

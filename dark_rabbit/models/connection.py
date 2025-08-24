@@ -1,7 +1,9 @@
 import logging
+import traceback
 import urllib.parse
 
 from odoo import api, fields, models
+from odoo.tools.safe_eval import datetime
 
 from odoo.addons.generic_mixin.tools.x2m_agg_utils import read_counts_for_o2m
 
@@ -20,9 +22,6 @@ class DarkRabbitConnection(models.Model):
         "generic.mixin.uniq_name_code",
     ]
     _order = "name"
-
-    name = fields.Char(required=True, index=True)
-    code = fields.Char()
 
     host = fields.Char(required=True)
     port = fields.Integer(default=5672, required=True)
@@ -92,6 +91,44 @@ class DarkRabbitConnection(models.Model):
             raise
 
         return connection
+
+    def send(self, events):
+        try:
+            connection = self.get_connection()
+        except Exception as exc:
+            for event in events:
+                event.write(
+                    {
+                        "error": True,
+                        "error_msg": "".join(traceback.format_exception(exc)),
+                    }
+                )
+        else:
+            channel = connection.channel()
+            for event in events:
+                try:
+                    channel.basic_publish(
+                        exchange=event.exchange,
+                        routing_key=event.routing_key,
+                        body=event.body,
+                        properties=pika.BasicProperties(
+                            delivery_mode=pika.DeliveryMode.Persistent
+                        ),
+                    )
+                except Exception as exc:
+                    event.write(
+                        {
+                            "error": True,
+                            "error_msg": "".join(traceback.format_exception(exc)),
+                        }
+                    )
+                else:
+                    event.write(
+                        {
+                            "sent_at": datetime.datetime.now(),
+                        }
+                    )
+            connection.close()
 
     def action_test_connection(self):
         self.ensure_one()

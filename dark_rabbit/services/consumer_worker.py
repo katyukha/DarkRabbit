@@ -16,7 +16,7 @@ RELOAD_PERIOD = 2  # seconds
 POLLING_CYCLE_INTERVAL = 0.3  # seconds
 
 
-class DarkRabbitWorker(AbstractBackgroundServiceWorker):
+class DarkRabbitConsumerWorker(AbstractBackgroundServiceWorker):
     """This class represents service worker for single database.
 
     It is responsible for reading info about connections,
