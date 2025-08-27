@@ -26,8 +26,10 @@ class DarkRabbitOutgoingEvent(models.Model):
     created_at = fields.Datetime(string="Creation date", automatic=True, readonly=True)
 
     def add(self, e_type, body):
-        event_type = self.env["dark.rabbit.outgoing.event.type"].search(
-            [("code", "=", e_type)]
+        event_type = (
+            self.sudo()
+            .env["dark.rabbit.outgoing.event.type"]
+            .search([("code", "=", e_type)])
         )
         routing_ids = event_type.outgoing_routing_ids
 

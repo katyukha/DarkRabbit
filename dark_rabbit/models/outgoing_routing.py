@@ -24,5 +24,3 @@ class DarkRabbitOutgoingRouting(models.Model):
     routing_key = fields.Char(string="Routing Key", required=True, index=True)
 
     active = fields.Boolean(default=True, index=True)
-
-    creted_at = fields.Datetime(string="Creation date", automatic=True, readonly=True)

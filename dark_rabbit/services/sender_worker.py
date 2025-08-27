@@ -22,15 +22,19 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
 
     def run_service(self):
         with self.with_env() as env:
-
             connections = env["dark.rabbit.connection"].search([])
 
             for connection in connections:
-                events_for_send = env["dark.rabbit.outgoing.event"].search(
-                    [
-                        ("sent_at", "=", False),
-                        ("connection_id", "=", connection.id),
-                    ]
-                )
-                if len(events_for_send) > 0:
-                    connection.send(events_for_send)
+                while True:
+                    with self.with_env() as env:
+                        events_for_send = env["dark.rabbit.outgoing.event"].search(
+                            [
+                                ("sent_at", "=", False),
+                                ("connection_id", "=", connection.id),
+                            ],
+                            limit=100,
+                        )
+                        if len(events_for_send) > 0:
+                            connection.send(events_for_send)
+                        else:
+                            break
