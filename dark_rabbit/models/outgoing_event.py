@@ -5,6 +5,8 @@ from odoo import api, fields, models
 
 class DarkRabbitOutgoingEvent(models.Model):
     _name = "dark.rabbit.outgoing.event"
+    _order = "created_at DESC"
+    _description = "Dark Rabbit Outgoing Event"
 
     body = fields.Text(required=True, readonly=True)
     body_json_pretty = fields.Text(
@@ -34,7 +36,12 @@ class DarkRabbitOutgoingEvent(models.Model):
     error_msg = fields.Text(readonly=True)
 
     # TODO: Replace with create_date
-    created_at = fields.Datetime(string="Creation date", automatic=True, readonly=True)
+    created_at = fields.Datetime(
+        default=fields.Datetime.now,
+        string="Creation date",
+        automatic=True,
+        readonly=True,
+    )
 
     @api.depends("body")
     def _compute_body_json_pretty(self):

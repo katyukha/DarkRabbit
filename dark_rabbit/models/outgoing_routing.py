@@ -3,10 +3,10 @@ from odoo import fields, models
 
 class DarkRabbitOutgoingRouting(models.Model):
     _name = "dark.rabbit.outgoing.routing"
+    _description = "Dark Rabbit Outgoing Routing"
 
     outgoing_event_type_id = fields.Many2one(
         comodel_name="dark.rabbit.outgoing.event.type",
-        inverse_name="outgoing_routing_ids",
         string="Outgoing event type",
         required=True,
         index=True,
@@ -17,6 +17,7 @@ class DarkRabbitOutgoingRouting(models.Model):
         string="Connection",
         ondelete="cascade",
         required=True,
+        index=True,
     )
 
     exchange = fields.Char(string="Exchange", required=True, index=True)

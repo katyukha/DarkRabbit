@@ -3,6 +3,7 @@ from odoo import fields, models
 
 class DarkRabbitOutgoingEventType(models.Model):
     _name = "dark.rabbit.outgoing.event.type"
+    _description = "Darg Rabbit Outgoing Event Type"
 
     _inherit = ["generic.mixin.name_with_code", "generic.mixin.uniq_name_code"]
 

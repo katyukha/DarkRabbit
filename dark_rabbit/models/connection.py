@@ -20,6 +20,7 @@ class DarkRabbitConnection(models.Model):
         "generic.mixin.uniq_name_code",
     ]
     _order = "name"
+    _description = "Dark Rabbit Connection"
 
     host = fields.Char(required=True)
     port = fields.Integer(default=5672, required=True)
