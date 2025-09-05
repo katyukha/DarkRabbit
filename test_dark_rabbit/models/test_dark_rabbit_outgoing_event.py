@@ -10,16 +10,16 @@ class TestDarkRabbitOutgoingEvent(models.Model):
 
         records = super().create(vals)
         for rec in records:
-            self.env["dark.rabbit.outgoing.event"].add("test-record-created", rec.body)
+            self.cry_in_darkness("test-record-created", rec.body)
         return records
 
     def write(self, vals):
-        records = super().write(vals)
+        res = super().write(vals)
         for rec in self:
-            self.env["dark.rabbit.outgoing.event"].add("test-record-updated", rec.body)
-        return records
+            self.cry_in_darkness("test-record-updated", rec.body)
+        return res
 
     def unlink(self):
         for rec in self:
-            self.env["dark.rabbit.outgoing.event"].add("test-record-deleted", rec.body)
+            self.cry_in_darkness("test-record-deleted", rec.body)
         return super().unlink()

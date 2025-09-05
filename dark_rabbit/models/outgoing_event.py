@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class DarkRabbitOutgoingEvent(models.Model):
     _name = "dark.rabbit.outgoing.event"
 
-    body = fields.Text(required=True)
+    body = fields.Text(required=True, readonly=True)
     body_json_pretty = fields.Text(
         compute="_compute_body_json_pretty", readonly=True, store=False
     )
@@ -14,19 +14,21 @@ class DarkRabbitOutgoingEvent(models.Model):
     outgoing_event_type_id = fields.Many2one(
         comodel_name="dark.rabbit.outgoing.event.type",
         ondelete="set null",
+        readonly=True,
     )
 
     connection_id = fields.Many2one(
         comodel_name="dark.rabbit.connection",
         required=True,
+        readonly=True,
         ondelete="restrict",
     )
 
-    exchange = fields.Char(required=True, index=True)
+    exchange = fields.Char(required=True, index=True, readonly=True)
 
-    routing_key = fields.Char(required=True, index=True)
+    routing_key = fields.Char(required=True, index=True, readonly=True)
 
-    sent_at = fields.Datetime()
+    sent_at = fields.Datetime(readonly=True)
 
     error = fields.Boolean(readonly=True)
     error_msg = fields.Text(readonly=True)

@@ -53,8 +53,7 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
         self.reload_publishers()
 
     def _get_publisher_config(self):
-        # Show only connections that could be used to send events (has
-        # configured routings
+        # Find connections that need to use publisher
         with self.with_env() as env:
             connections_map = {
                 c.id: c.get_publisher_config()
