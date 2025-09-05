@@ -3,6 +3,7 @@ import time
 
 import psycopg2
 
+from odoo.addons.dark_rabbit.tools.dark_connection_pool import DarkConnectionPool
 from odoo.addons.dark_rabbit.tools.dark_consumer import DarkRabbitConsumer
 from odoo.addons.generic_background_service import AbstractBackgroundServiceWorker
 
@@ -29,7 +30,12 @@ class DarkRabbitConsumerWorker(AbstractBackgroundServiceWorker):
 
         # Consumer registry
         # Dict: {conn_id: DarkRabbitConsumer}
-        self._consumer_registry = {}
+        self._consumer_registry = DarkConnectionPool(
+            connection_factory=lambda config: DarkRabbitConsumer(
+                consumer_config=config,
+                callback_on_message=self._on_message,
+            )
+        )
 
         self._reload_timestamp = None
 
@@ -63,54 +69,11 @@ class DarkRabbitConsumerWorker(AbstractBackgroundServiceWorker):
             )
             connections_map = {}
 
-        # Stop consumers that are not in active connections
-        stop_connection_ids = [
-            conn_id
-            for conn_id in self._consumer_registry
-            if conn_id not in connections_map
-        ]
-
-        # Find consumers that have changed configuration and have to be reloaded,
-        # and add them to stop list
-        for conn_id, conn_config in connections_map.items():
-            consumer = self._consumer_registry.get(conn_id, None)
-            if consumer is None:
-                # Consumer is not started yet
-                continue
-
-            # We have to restart connections that changed queues
-            # configuration
-            if consumer.config != conn_config:
-                stop_connection_ids += [conn_id]
-
-        # Stop consumers that have to be stopped
-        for conn_id in stop_connection_ids:
-            self._consumer_registry[conn_id].close()
-            del self._consumer_registry[conn_id]
-
-        # Spawn missing consumers
-        for conn_id, conn_config in connections_map.items():
-            if conn_id in self._consumer_registry:
-                # Nothing todo, consumer already running
-                continue
-
-            try:
-                consumer = DarkRabbitConsumer(
-                    consumer_config=conn_config,
-                    callback_on_message=self._on_message,
-                )
-            except Exception:
-                _logger.error(
-                    "Cannot spawn consumer for connection %s", conn_id, exc_info=True
-                )
-                continue
-
-            self._consumer_registry[conn_id] = consumer
+        self._consumer_registry.update_config(connections_map)
         self._reload_timestamp = time.time()
 
     def on_shutdown(self):
-        for consumer in self._consumer_registry.values():
-            consumer.close()
+        self._consumer_registry.close_all()
 
     def _on_message(self, message):
         with self.with_env() as env:
@@ -124,32 +87,4 @@ class DarkRabbitConsumerWorker(AbstractBackgroundServiceWorker):
         ):
             self.reload_consumers()
 
-        for conn_id, consumer in self._consumer_registry.items():
-            if self._worker_event_stop.is_set():
-                # Exit fast if stop event received
-                break
-
-            if consumer.channel.is_closed:
-                # If channel connection is closed, then schedule reload of
-                # consumer.
-                consumer.schedule_reload()
-                continue
-
-            # Do the actual poll events
-            try:
-                consumer.poll_events()
-            except ValueError as e:
-                _logger.error(
-                    "Error while polling events (conn_id=%s)", conn_id, exc_info=True
-                )
-                if str(e) == "Timeout closed before call":
-                    # It seems that connection was closed, so in this case we
-                    # just schedule connection reload
-                    consumer.schedule_reload()
-                    continue
-                raise
-            except Exception:
-                _logger.error(
-                    "Error while polling events (conn_id=%s)", conn_id, exc_info=True
-                )
-                raise
+        self._consumer_registry.process_data_events()

@@ -1,6 +1,10 @@
+import logging
+
 import pika
 
 DEFAULT_PROCESS_EVENTS_TIME_LIMIT = 0.2
+
+_logger = logging.getLogger(__name__)
 
 
 class DarkRabbitConnectionBase:

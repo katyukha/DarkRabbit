@@ -3,7 +3,6 @@ import logging
 from .dark_connection_base import DarkRabbitConnectionBase
 
 DEFAULT_PREFETCH_COUNT = 3
-DEFAULT_PROCESS_EVENTS_TIME_LIMIT = 0.2
 
 _logger = logging.getLogger(__name__)
 
@@ -63,7 +62,7 @@ class DarkRabbitConsumer(DarkRabbitConnectionBase):
     that is responnsible for handling all the messages
     """
 
-    # TODO: Move prefetch coung in connection or queue config
+    # TODO: Move prefetch count in connection or queue config
     def __init__(
         self,
         consumer_config,
@@ -72,6 +71,7 @@ class DarkRabbitConsumer(DarkRabbitConnectionBase):
     ):
         super().__init__(consumer_config)
 
+        # This will start the connection
         self.channel.basic_qos(prefetch_count=prefetch_count)
 
         self._callback_on_message = callback_on_message
@@ -141,5 +141,5 @@ class DarkRabbitConsumer(DarkRabbitConnectionBase):
         else:
             message.ack()
 
-    def poll_events(self, time_limit=DEFAULT_PROCESS_EVENTS_TIME_LIMIT):
-        self.connection.process_data_events(time_limit=time_limit)
+    def poll_events(self):
+        self.process_data_events()
