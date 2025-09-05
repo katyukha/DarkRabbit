@@ -81,7 +81,7 @@ class DarkConnectionPool:
     def process_data_events(self):
         """Trigger process data events"""
         for connection in self._registry.values():
-            if connection.channel.is_closed:
+            if not connection.suspended and connection.channel.is_closed:
                 # If channel connection is closed, then schedule reload of
                 # connection
                 connection.schedule_reload()

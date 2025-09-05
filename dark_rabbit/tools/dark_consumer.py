@@ -72,7 +72,7 @@ class DarkRabbitConsumer(DarkRabbitConnectionBase):
     ):
         super().__init__(consumer_config)
 
-        self._channel.basic_qos(prefetch_count=prefetch_count)
+        self.channel.basic_qos(prefetch_count=prefetch_count)
 
         self._callback_on_message = callback_on_message
 
