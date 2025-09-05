@@ -19,9 +19,9 @@ POLLING_CYCLE_INTERVAL = 0.3  # seconds
 class DarkRabbitConsumerWorker(AbstractBackgroundServiceWorker):
     """This class represents service worker for single database.
 
-    It is responsible for reading info about connections,
-    and spawning rabbit consumers in separate threads for each
-    'dark.rabbit.connection'.
+    This worker contains pool of rabbit consumers (each represent separate connection),
+    and polls these consumers for events in the loop,
+    attempting to read predefined amount of events.
     """
 
     def __init__(self, *args, **kwargs):

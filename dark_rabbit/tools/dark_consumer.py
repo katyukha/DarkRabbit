@@ -1,6 +1,6 @@
 import logging
 
-import pika
+from .dark_connection_base import DarkRabbitConnectionBase
 
 DEFAULT_PREFETCH_COUNT = 3
 DEFAULT_PROCESS_EVENTS_TIME_LIMIT = 0.2
@@ -58,7 +58,7 @@ class DarkRabbitCallBack:
         return self._callback(message)
 
 
-class DarkRabbitConsumer:
+class DarkRabbitConsumer(DarkRabbitConnectionBase):
     """For each connection, we run single consumer,
     that is responnsible for handling all the messages
     """
@@ -70,11 +70,8 @@ class DarkRabbitConsumer:
         callback_on_message,
         prefetch_count=DEFAULT_PREFETCH_COUNT,
     ):
-        self._config = consumer_config
-        self._connection = pika.BlockingConnection(
-            pika.URLParameters(self._config["connection_url"])
-        )
-        self._channel = self._connection.channel()
+        super().__init__(consumer_config)
+
         self._channel.basic_qos(prefetch_count=prefetch_count)
 
         self._callback_on_message = callback_on_message
@@ -129,37 +126,8 @@ class DarkRabbitConsumer:
             )
 
     @property
-    def connection_id(self):
-        return self._config["connection_id"]
-
-    @property
-    def connection(self):
-        return self._connection
-
-    @property
-    def channel(self):
-        return self._channel
-
-    @property
     def listened_queues(self):
         return self._listened_queues
-
-    @property
-    def config(self):
-        return self._config
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, value, traceback):
-        self.close()
-
-    def close(self):
-        if not self._channel.is_closed:
-            self._channel.close()
-
-        if not self._connection.is_closed:
-            self._connection.close()
 
     def _on_message(self, message):
         try:
@@ -172,9 +140,6 @@ class DarkRabbitConsumer:
             # Possibly suspend consumer for some period of time.
         else:
             message.ack()
-
-    def schedule_reload(self):
-        self._config["dark-consumer-reload"] = True
 
     def poll_events(self, time_limit=DEFAULT_PROCESS_EVENTS_TIME_LIMIT):
         self.connection.process_data_events(time_limit=time_limit)

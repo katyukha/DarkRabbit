@@ -1,17 +1,25 @@
-from odoo import fields, models
+import json
+
+from odoo import api, fields, models
 
 
 class DarkRabbitOutgoingEvent(models.Model):
     _name = "dark.rabbit.outgoing.event"
 
     body = fields.Text(required=True)
+    body_json_pretty = fields.Text(
+        compute="_compute_body_json_pretty", readonly=True, store=False
+    )
 
     outgoing_event_type_id = fields.Many2one(
-        comodel_name="dark.rabbit.outgoing.event.type"
+        comodel_name="dark.rabbit.outgoing.event.type",
+        ondelete="set null",
     )
 
     connection_id = fields.Many2one(
-        comodel_name="dark.rabbit.connection", required=True
+        comodel_name="dark.rabbit.connection",
+        required=True,
+        ondelete="restrict",
     )
 
     exchange = fields.Char(required=True, index=True)
@@ -23,7 +31,17 @@ class DarkRabbitOutgoingEvent(models.Model):
     error = fields.Boolean(readonly=True)
     error_msg = fields.Text(readonly=True)
 
+    # TODO: Replace with create_date
     created_at = fields.Datetime(string="Creation date", automatic=True, readonly=True)
+
+    @api.depends("body")
+    def _compute_body_json_pretty(self):
+        for record in self:
+            try:
+                pretty = json.dumps(json.loads(record.body), indent=4)
+            except Exception:
+                pretty = False
+            record.body_json_pretty = pretty
 
     def add(self, e_type, body):
         event_type = (

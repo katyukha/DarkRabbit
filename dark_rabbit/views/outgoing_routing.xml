@@ -4,8 +4,6 @@
         <field name="model">dark.rabbit.outgoing.routing</field>
         <field name="arch" type="xml">
             <list>
-                <field name="name"/>
-                <field name="code" optional="False"/>
                 <field name="connection_id"/>
                 <field name="outgoing_event_type_id"/>
                 <field name="exchange"/>
@@ -24,10 +22,6 @@
                     <widget name="web_ribbon" title="Archived"
                             bg_color="bg-danger"
                             invisible="active == True" />
-                    <div class="oe_title">
-                        <field name="name" nolabel="1" placeholder="Routing name..."/>
-                        <field name="code" nolabel="1" placeholder="Routing code..."/>
-                    </div>
                     <group>
                         <group>
                             <field name="connection_id"/>

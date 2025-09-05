@@ -12,7 +12,9 @@
                 <field name="user"/>
                 <field name="active"/>
                 <field name="queue_count"/>
+                <field name="outgoing_route_count"/>
                 <field name="event_count"/>
+                <field name="outgoing_event_count"/>
             </list>
         </field>
     </record>
@@ -36,11 +38,25 @@
                                    name="queue_count"
                                    widget="statinfo"/>
                         </button>
+                        <button name="action_view_outgoing_routes"
+                                type="object"
+                                class="oe_stat_button">
+                            <field string="Outgoing routes"
+                                   name="outgoing_route_count"
+                                   widget="statinfo"/>
+                        </button>
                         <button name="action_view_events"
                                 type="object"
                                 class="oe_stat_button">
                             <field string="Events"
                                    name="event_count"
+                                   widget="statinfo"/>
+                        </button>
+                        <button name="action_view_outgoing_events"
+                                type="object"
+                                class="oe_stat_button">
+                            <field string="Outgoing Events"
+                                   name="outgoing_event_count"
                                    widget="statinfo"/>
                         </button>
                     </div>
