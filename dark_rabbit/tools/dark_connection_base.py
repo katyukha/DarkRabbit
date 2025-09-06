@@ -22,7 +22,7 @@ class DarkRabbitConnectionBase:
         self._connection = None
         self._channel = None
 
-        # By default connection is sasspendend.
+        # By default connection is suspendend.
         # First access to connection or channel will automatically
         # establish connection to rabbit. Thus at start we could mark this
         # connection as suspended

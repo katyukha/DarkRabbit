@@ -113,6 +113,7 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
                 ("sent_at", "=", False),
                 ("connection_id", "in", self._publisher_registry.active_connection_ids),
             ],
+            order="created_at ASC",
             limit=BATCH_PUBLISH,
         )
         events_total = len(events)
