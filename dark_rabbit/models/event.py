@@ -12,21 +12,26 @@ class DarkRabbitEvent(models.Model):
     _description = "Dark Rabbit: Event"
     _order = "create_date DESC"
 
-    create_date = fields.Datetime(required=True, index=True)
+    create_date = fields.Datetime(required=True, index=True, readonly=True)
     connection_id = fields.Many2one(
         comodel_name="dark.rabbit.connection",
         required=True,
         index=True,
         ondelete="restrict",
+        readonly=True,
     )
     queue_id = fields.Many2one(
-        comodel_name="dark.rabbit.queue", required=True, index=True, ondelete="restrict"
+        comodel_name="dark.rabbit.queue",
+        required=True,
+        index=True,
+        readonly=True,
+        ondelete="restrict",
     )
     handler_id = fields.Many2one(
-        comodel_name="dark.rabbit.handler", required=False, index=True
+        comodel_name="dark.rabbit.handler", required=False, readonly=True, index=True
     )
-    routing_key = fields.Char(required=True)
-    body = fields.Text()
+    routing_key = fields.Char(required=True, readonly=True)
+    body = fields.Text(readonly=True)
     body_json_pretty = fields.Text(
         compute="_compute_body_json_pretty", readonly=True, store=False
     )

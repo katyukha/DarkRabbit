@@ -4,13 +4,15 @@
     "author": "Center of Research and Development",
     "website": "https://crnd.pro",
     "category": "Hidden",
-    "version": "18.0.0.1.0",
+    "version": "18.0.0.1.2",
     "depends": [
         "dark_rabbit",
     ],
     "data": [
         "security/ir.model.access.csv",
         "views/test_dark_rabbit_handler.xml",
+        "views/test_dark_rabbit_outgoing_event.xml",
+        "data/outgoing_event_type.xml",
     ],
     "demo": [],
     "images": ["static/description/banner.png"],

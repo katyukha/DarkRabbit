@@ -1,1 +1,1 @@
-from . import test_dark_rabbit_handler
+from . import test_dark_rabbit_handler, test_dark_rabbit_outgoing_event
