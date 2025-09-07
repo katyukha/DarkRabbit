@@ -58,9 +58,8 @@ class DarkRabbitOutgoingEvent(models.Model):
             .env["dark.rabbit.outgoing.event.type"]
             .search([("code", "=", e_type)])
         )
-        routing_ids = event_type.outgoing_routing_ids
 
-        for routing_id in routing_ids:
+        for routing_id in event_type.outgoing_routing_ids:
             self.sudo().env["dark.rabbit.outgoing.event"].create(
                 {
                     "body": body,

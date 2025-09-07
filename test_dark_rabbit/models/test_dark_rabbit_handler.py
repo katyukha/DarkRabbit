@@ -11,4 +11,8 @@ class TestDarkRabbitHandler(models.Model):
 
     @dark_rabbit_handler("Test Handler")
     def _on_dark_rabbit_event(self, event):
-        self.create({"body": event.body})
+        self.create(
+            {
+                "body": event.read_as_json()["body"],
+            }
+        )
