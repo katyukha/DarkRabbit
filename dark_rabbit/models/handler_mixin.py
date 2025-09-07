@@ -24,7 +24,8 @@ class DarkRabbitHandlerMixin(models.AbstractModel):
             for method_name, handler_name in find_dark_rabbit_handlers(cls):
                 handler_rows += [(hmodel_id, method_name, handler_name)]
 
-            if len(handler_rows) == 0:
+            # TODO: Handle also case when handlers were removed from module
+            if not handler_rows:
                 return
 
             self.env.cr.execute(

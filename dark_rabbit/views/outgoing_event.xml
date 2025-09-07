@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_dark_rabbit_event_tree" model="ir.ui.view">
-        <field name="model">dark.rabbit.event</field>
+    <record id="view_dark_rabbit_outgoing_event_tree" model="ir.ui.view">
+        <field name="model">dark.rabbit.outgoing.event</field>
         <field name="arch" type="xml">
             <list>
-                <field name="create_date"/>
+                <field name="created_at"/>
+                <field name="outgoing_event_type_id"/>
                 <field name="connection_id"/>
-                <field name="queue_id"/>
+                <field name="exchange"/>
                 <field name="routing_key"/>
-                <field name="handler_id"/>
+                <field name="sent_at"/>
                 <field name="error"/>
             </list>
         </field>
     </record>
 
-    <record id="view_dark_rabbit_event_form" model="ir.ui.view">
-        <field name="model">dark.rabbit.event</field>
+    <record id="view_dark_rabbit_outgoing_event_form" model="ir.ui.view">
+        <field name="model">dark.rabbit.outgoing.event</field>
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_retry_handle"
-                            type="object"
-                            string="Retry handle"
-                            class="oe_highlight"
-                            icon="fa-refresh"
-                            invisible="not error"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box" />
                     <group>
                         <group>
+                            <field name="outgoing_event_type_id"/>
                             <field name="connection_id"/>
-                            <field name="queue_id"/>
-                            <field name="handler_id"/>
+                            <field name="exchange"/>
+                            <field name="routing_key"/>
                         </group>
                         <group>
-                            <field name="create_date"/>
-                            <field name="routing_key"/>
+                            <field name="created_at"/>
+                            <field name="sent_at"/>
                         </group>
                         <group colspan="2" string="Body">
                             <field name="body" nolabel="1" colspan="2" invisible="body_json_pretty"/>
@@ -52,15 +48,17 @@
         </field>
     </record>
 
-    <record id="view_dark_rabbit_event_search" model="ir.ui.view">
-        <field name="model">dark.rabbit.event</field>
+    <record id="view_dark_rabbit_outgoing_event_search" model="ir.ui.view">
+        <field name="model">dark.rabbit.outgoing.event</field>
         <field name="arch" type="xml">
             <search>
-                <field name="create_date"/>
-                <field name="routing_key"/>
+                <field name="body"/>
                 <field name="connection_id" />
-                <field name="queue_id"/>
-                <field name="handler_id"/>
+                <field name="outgoing_event_type_id"/>
+                <field name="exchange"/>
+                <field name="routing_key"/>
+                <field name="created_at"/>
+                <field name="sent_at"/>
 
                 <filter name="filter_with_error"
                         string="Error"
@@ -69,19 +67,12 @@
                         string="No error"
                         domain="[('error', '=', False)]"/>
                 <separator/>
-                <filter name="filter_with_handler"
-                        string="With handler"
-                        domain="[('handler_id', '!=', False)]"/>
-                <filter name="filter_without_handler"
-                        string="Without handler"
-                        domain="[('handler_id', '=', False)]"/>
-                <separator/>
 
                 <group expand="1" string="Group By">
                     <filter
                         string="Date"
-                        name="group_by_create_date"
-                        context="{'group_by':'create_date'}"
+                        name="group_by_created_at"
+                        context="{'group_by':'created_at'}"
                     />
                     <filter
                         string="Connection"
@@ -89,14 +80,9 @@
                         context="{'group_by':'connection_id'}"
                     />
                     <filter
-                        string="Queue"
-                        name="group_by_queue_id"
-                        context="{'group_by':'queue_id'}"
-                    />
-                    <filter
-                        string="Handler"
-                        name="group_by_handler_id"
-                        context="{'group_by':'handler_id'}"
+                        string="Outgoing Event Type"
+                        name="group_by_outgoing_event_type_id"
+                        context="{'group_by':'outgoing_event_type_id'}"
                     />
                     <filter
                         string="Error"
@@ -107,21 +93,20 @@
 
                 <searchpanel view_types="list,pivot,graph">
                     <field name="connection_id" string="Connection" select="multi"/>
-                    <field name="queue_id" string="Queue" select="multi"/>
-                    <field name="handler_id" string="Handler" select="multi"/>
+                    <field name="outgoing_event_type_id" string="Outgoing Event Type" select="multi"/>
                 </searchpanel>
             </search>
         </field>
     </record>
-    <record id="action_dark_rabbit_event_list" model="ir.actions.act_window">
-        <field name="name">Dark Rabbit Event</field>
-        <field name="res_model">dark.rabbit.event</field>
+    <record id="action_dark_rabbit_outgoing_event_list" model="ir.actions.act_window">
+        <field name="name">Dark Rabbit Outgoing Event</field>
+        <field name="res_model">dark.rabbit.outgoing.event</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem action="action_dark_rabbit_event_list"
-              id="menu_dark_rabbit_event"
-              sequence="50"
+    <menuitem action="action_dark_rabbit_outgoing_event_list"
+              id="menu_dark_rabbit_outgoing_event"
+              sequence="60"
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>
