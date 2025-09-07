@@ -8,6 +8,7 @@
                 <field name="connection_id"/>
                 <field name="queue_id"/>
                 <field name="routing_key"/>
+                <field name="handler_id"/>
                 <field name="error"/>
             </list>
         </field>
@@ -107,7 +108,7 @@
                 <searchpanel view_types="list,pivot,graph">
                     <field name="connection_id" string="Connection" select="multi"/>
                     <field name="queue_id" string="Queue" select="multi"/>
-                    <field name="handler_id" string="Queue" select="multi"/>
+                    <field name="handler_id" string="Handler" select="multi"/>
                 </searchpanel>
             </search>
         </field>
