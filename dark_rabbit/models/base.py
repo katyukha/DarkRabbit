@@ -1,13 +1,17 @@
 import json
+import logging
 
 from odoo import models
+
+_logger = logging.getLogger(__name__)
 
 
 class Base(models.AbstractModel):
     _inherit = "base"
 
-    def cry_in_darkness(self, code, message, jsonify=True):
-        """Cry message in darkness, and hope that somebody will here you.
+    def shout_into_darkness(self, code, message, jsonify=True):
+        """Shout the message into the darkness and Dark Rabbit will come
+            to deliver your message to the destination.
 
         :param str code: code of message to be sent
         :param any message: message to be sent.
@@ -21,3 +25,10 @@ class Base(models.AbstractModel):
             code,
             message,
         )
+
+    # For backward compatibility
+    def cry_in_darkness(self, code, message, jsonify=True):
+        _logger.warning(
+            "Call to `cry_in_darkness` is deprecated. Use `shout_into_dakrness` instead."
+        )
+        return self.shout_into_darkness(code, message, jsonify=jsonify)
