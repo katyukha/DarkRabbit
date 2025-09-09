@@ -43,7 +43,9 @@ class DarkRabbitEvent(models.Model):
     def _compute_body_json_pretty(self):
         for record in self:
             try:
-                pretty = json.dumps(json.loads(record.body), indent=4)
+                pretty = json.dumps(
+                    json.loads(record.body), indent=4, ensure_ascii=False
+                )
             except Exception:
                 pretty = False
             record.body_json_pretty = pretty
