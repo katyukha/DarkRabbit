@@ -39,6 +39,9 @@
                             <field name="connection_id"/>
                             <field name="queue_name"/>
                         </group>
+                        <group name="group_handler" string="Handler">
+                            <field name="handler_id"/>
+                        </group>
                         <group name="group_declare" string="Declare">
                             <field name="queue_declare"/>
                             <field name="queue_declare_exclusive" invisible="not queue_declare"/>
@@ -58,9 +61,6 @@
                                     <field name="routing_key"/>
                                 </list>
                             </field>
-                        </group>
-                        <group name="group_handler" string="Handler">
-                            <field name="handler_id"/>
                         </group>
                     </group>
                 </sheet>
