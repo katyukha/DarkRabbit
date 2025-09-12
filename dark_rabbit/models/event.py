@@ -13,6 +13,17 @@ class DarkRabbitEvent(models.Model):
     _order = "create_date DESC"
 
     create_date = fields.Datetime(required=True, index=True, readonly=True)
+    message_id = fields.Char(
+        string="Message ID", readonly=True, help="Message ID from message properties"
+    )
+    correlation_id = fields.Char(
+        string="Correlation ID",
+        readonly=True,
+        help="Correlation ID from message properties.",
+    )
+    timestamp = fields.Char(readonly=True, help="Timestamp from message properties")
+    message_type = fields.Char(readonly=True, help="Type field from message properties")
+    content_type = fields.Char(readonly=True, help="Content type of incoming message")
     connection_id = fields.Many2one(
         comodel_name="dark.rabbit.connection",
         required=True,
@@ -54,6 +65,7 @@ class DarkRabbitEvent(models.Model):
     def handle_message(self, message):
         # Message is DarkRabbitMessage
         # TODO: Use SQL to ensure connect, queue and handler_id still exists
+        # TODO: Avoid duplication, if message_id is available
         event = self.create(
             {
                 "connection_id": message.connection_id,
@@ -61,6 +73,11 @@ class DarkRabbitEvent(models.Model):
                 "routing_key": message.method.routing_key,
                 "handler_id": message.handler_id,
                 "body": message.body,
+                "correlation_id": message.properties.correlation_id,
+                "message_id": message.properties.message_id,
+                "message_type": message.properties.type,
+                "timestamp": message.properties.timestamp,
+                "content_type": message.properties.content_type,
             }
         )
 

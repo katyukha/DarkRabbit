@@ -89,8 +89,25 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
 
         :return: False on error, None on skipped event, True on success
         """
+        # TODO: publish each event in own transaction,
+        # to avoid repeating of event sent multiple times
         try:
-            publisher.publish(event.exchange, event.routing_key, event.body)
+            timestamp = int(event.timestamp)
+        except ValueError:
+            # TODO: Do we need to set None here?
+            timestamp = None
+
+        try:
+            publisher.publish(
+                event.exchange,
+                event.routing_key,
+                event.body,
+                message_id=event.message_id,
+                correlation_id=event.correlation_id,
+                timestamp=timestamp,
+                message_type=event.message_type,
+                content_type=event.content_type,
+            )
         except Exception as exc:
             event.write(
                 {
