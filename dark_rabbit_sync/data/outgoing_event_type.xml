@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="dark.rabbit.outgoing.event.type" id="outgoing_event_type_dark_rabbit_sync_event">
+        <field name="code">dark.rabbit.sync.event</field>
+        <field name="name">Dark Rabbit Sync Event</field>
+        <field name="sequence">350</field>
+    </record>
+
+</odoo>

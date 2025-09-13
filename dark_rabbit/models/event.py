@@ -70,6 +70,10 @@ class DarkRabbitEvent(models.Model):
         # Message is DarkRabbitMessage
         # TODO: Use SQL to ensure connect, queue and handler_id still exists
         # TODO: Avoid duplication, if message_id is available
+        if message.properties.message_id and self.search([('message_id', '=', message.properties.message_id)], limit=1):
+            # Such message already exists, thus we do not need to process it
+            # one more time. Possibly this is our message.
+            return
 
         event = self.create(
             {

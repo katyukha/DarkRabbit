@@ -15,4 +15,5 @@
         <field name="name">Test Record Deleted</field>
         <field name="sequence">300</field>
     </record>
+
 </odoo>
