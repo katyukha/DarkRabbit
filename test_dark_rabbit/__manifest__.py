@@ -1,10 +1,8 @@
 {
     "name": "Dark Rabbit (Tests)",
-    "summary": ("Can you see Dark Rabbit? Smile, it is just behind your back)"),
-    "author": "Center of Research and Development",
-    "website": "https://crnd.pro",
+    "summary": "Can you see Dark Rabbit? Smile, it is just behind your back)",
     "category": "Hidden",
-    "version": "18.0.0.1.4",
+    "version": "18.0.0.1.5",
     "depends": [
         "dark_rabbit",
     ],
@@ -15,7 +13,7 @@
         "data/outgoing_event_type.xml",
     ],
     "demo": [],
-    "images": ["static/description/banner.png"],
+    "images": [],
     "installable": True,
     "application": False,
     "license": "LGPL-3",

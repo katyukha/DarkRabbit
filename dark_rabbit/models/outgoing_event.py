@@ -42,7 +42,7 @@ class DarkRabbitOutgoingEvent(models.Model):
         size=38,
         default="/",
         copy=False,
-        string="UUID",
+        string="Message Id",
     )
     correlation_id = fields.Char(
         readonly=True,
