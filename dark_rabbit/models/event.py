@@ -66,6 +66,7 @@ class DarkRabbitEvent(models.Model):
         # Message is DarkRabbitMessage
         # TODO: Use SQL to ensure connect, queue and handler_id still exists
         # TODO: Avoid duplication, if message_id is available
+
         event = self.create(
             {
                 "connection_id": message.connection_id,

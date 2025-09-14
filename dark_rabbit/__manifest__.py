@@ -1,8 +1,6 @@
 {
     "name": "Dark Rabbit",
-    "version": "18.0.0.2.0",
-    "author": "Center of Research and Development",
-    "website": "https://crnd.pro",
+    "version": "18.0.0.2.1",
     "license": "LGPL-3",
     "summary": "Rabbit from Dark Side. Brings some dark magic to your messaging.",
     "category": "Technical Settings",

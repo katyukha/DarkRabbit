@@ -76,6 +76,7 @@ class DarkRabbitConsumerWorker(AbstractBackgroundServiceWorker):
         self._consumer_registry.close_all()
 
     def _on_message(self, message):
+        # TODO: Handle concurency errors in right way
         with self.with_env() as env:
             env["dark.rabbit.event"].handle_message(message)
 
