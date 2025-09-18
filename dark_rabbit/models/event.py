@@ -5,6 +5,7 @@ import traceback
 from odoo import api, fields, models
 
 from odoo.addons.base_field_big_int import BigInt
+from ..tools.dark_consumer import DarkRabbitMessage
 
 _logger = logging.getLogger(__name__)
 
@@ -50,6 +51,10 @@ class DarkRabbitEvent(models.Model):
     body_json_pretty = fields.Text(
         compute="_compute_body_json_pretty", readonly=True, store=False
     )
+    headers = fields.Json(readonly=True)
+    headers_pretty = fields.Text(
+        compute="_compute_headers_pretty",
+    )
 
     error = fields.Boolean(readonly=True)
     error_msg = fields.Text(readonly=True)
@@ -65,12 +70,24 @@ class DarkRabbitEvent(models.Model):
                 pretty = False
             record.body_json_pretty = pretty
 
+    @api.depends("headers")
+    def _compute_headers_pretty(self):
+        for record in self:
+            record.headers_pretty = json.dumps(
+                record.headers, indent=4, ensure_ascii=False
+            )
+
     @api.model
-    def handle_message(self, message):
-        # Message is DarkRabbitMessage
+    def handle_message(self, message: DarkRabbitMessage):
+        """Handle DarkRabbitMessage received from Rabbit MQ
+
+        :param DarkRabbitMessage message: message to handle.
+        """
         # TODO: Use SQL to ensure connect, queue and handler_id still exists
         # TODO: Avoid duplication, if message_id is available
-        if message.properties.message_id and self.search([('message_id', '=', message.properties.message_id)], limit=1):
+        if message.properties.message_id and self.search(
+            [("message_id", "=", message.properties.message_id)], limit=1
+        ):
             # Such message already exists, thus we do not need to process it
             # one more time. Possibly this is our message.
             return
@@ -87,6 +104,7 @@ class DarkRabbitEvent(models.Model):
                 "message_type": message.properties.type,
                 "timestamp": message.properties.timestamp,
                 "content_type": message.properties.content_type,
+                "headers": message.properties.headers,
             }
         )
 

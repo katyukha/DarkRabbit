@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_test_dark_rabbit_sync_related_record_tree" model="ir.ui.view">
+        <field name="model">test.dark.rabbit.sync.related.record</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_test_dark_rabbit_sync_related_record_form" model="ir.ui.view">
+        <field name="model">test.dark.rabbit.sync.related.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_test_dark_rabbit_sync_related_record_list" model="ir.actions.act_window">
+        <field name="name">Test Dark Rabbit Sync Record</field>
+        <field name="res_model">test.dark.rabbit.sync.related.record</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem name="Dark Rabbit: Test Sync Related"
+              id="menu_dark_rabbit_tests_sync_related_record"
+              sequence="60"
+              parent="menu_dark_rabbit_tests"
+              action="action_test_dark_rabbit_sync_related_record_list"/>
+
+</odoo>

@@ -120,6 +120,7 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
                 timestamp=timestamp,
                 message_type=event.message_type,
                 content_type=event.content_type,
+                headers=event.headers,
             )
         except Exception as exc:
             event.write(

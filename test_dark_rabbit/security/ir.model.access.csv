@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_test_dark_rabbit_handler,test_dark_rabbit_handler,model_test_dark_rabbit_handler,,1,1,1,1
 access_test_dark_rabbit_outgoing_event,test_dark_rabbit_outgoing_event,model_test_dark_rabbit_outgoing_event,,1,1,1,1
 access_test_dark_rabbit_sync_record,test_dark_rabbit_sync_record,model_test_dark_rabbit_sync_record,,1,1,1,1
+access_test_dark_rabbit_sync_related_record,test_dark_rabbit_sync_related_record,model_test_dark_rabbit_sync_related_record,,1,1,1,1

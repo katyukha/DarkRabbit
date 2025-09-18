@@ -66,6 +66,7 @@ class DarkRabbitPublisher(DarkRabbitConnectionBase):
         timestamp=None,
         message_type=None,
         content_type=None,
+        headers=None,
     ):
         """Publish message"""
         props = pika.BasicProperties(
@@ -81,6 +82,8 @@ class DarkRabbitPublisher(DarkRabbitConnectionBase):
             props.type = message_type
         if content_type:
             props.content_type = content_type
+        if headers:
+            props.headers = headers
 
         self.channel.basic_publish(
             exchange=exchange,

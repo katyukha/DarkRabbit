@@ -47,6 +47,9 @@
                             <field name="correlation_id"/>
                             <field name="content_type"/>
                         </group>
+                        <group colspan="2" string="Headers">
+                            <field name="headers_pretty" nolabel="1" colspan="2" widget="code" options="{'mode': 'javascript'}"/>
+                        </group>
                         <group colspan="2" string="Body">
                             <field name="body" nolabel="1" colspan="2" invisible="body_json_pretty"/>
                             <field name="body_json_pretty" nolabel="1" colspan="2" invisible="not body_json_pretty" widget="code" options="{'mode': 'javascript'}"/>

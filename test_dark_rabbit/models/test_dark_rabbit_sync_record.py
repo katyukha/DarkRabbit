@@ -14,6 +14,7 @@ class TestDarkRabbitSyncRecord(models.Model):
     _dark_rabbit_sync_fields = [
         "dt",
         "text",
+        "related_id",
     ]
     _dark_rabbit_sync_key = "uuid"
 
@@ -28,4 +29,9 @@ class TestDarkRabbitSyncRecord(models.Model):
     )
 
     dt = fields.Datetime(default=fields.Datetime.now, required=True, index=True)
+    related_id = fields.Many2one(
+        string="Related",
+        comodel_name="test.dark.rabbit.sync.related.record",
+        index=True,
+    )
     text = fields.Text()

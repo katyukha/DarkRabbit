@@ -7,6 +7,7 @@
                 <field name="dt"/>
                 <field name="uuid"/>
                 <field name="text"/>
+                <field name="related_id"/>
             </list>
         </field>
     </record>
@@ -22,6 +23,7 @@
                     </group>
                     <group>
                         <field name="uuid"/>
+                        <field name="related_id"/>
                     </group>
                 </sheet>
             </form>

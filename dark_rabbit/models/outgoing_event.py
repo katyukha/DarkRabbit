@@ -29,6 +29,7 @@ class DarkRabbitOutgoingEvent(models.Model):
         comodel_name="dark.rabbit.outgoing.event.type",
         ondelete="set null",
         readonly=True,
+        index=True,
     )
 
     connection_id = fields.Many2one(
@@ -63,6 +64,10 @@ class DarkRabbitOutgoingEvent(models.Model):
     content_type = fields.Char(readonly=True, help="Content type of incoming message")
 
     sent_at = fields.Datetime(index=True, readonly=True)
+    headers = fields.Json(readonly=True)
+    headers_pretty = fields.Text(
+        compute="_compute_headers_pretty",
+    )
 
     error = fields.Boolean(readonly=True)
     error_msg = fields.Text(readonly=True)
@@ -83,6 +88,13 @@ class DarkRabbitOutgoingEvent(models.Model):
             except Exception:
                 pretty = False
             record.body_json_pretty = pretty
+
+    @api.depends("headers")
+    def _compute_headers_pretty(self):
+        for record in self:
+            record.headers_pretty = json.dumps(
+                record.headers, indent=4, ensure_ascii=False
+            )
 
     def add(
         self,
@@ -109,6 +121,8 @@ class DarkRabbitOutgoingEvent(models.Model):
         }
         if correlation_id is not None:
             event_data["correlation_id"] = correlation_id
+        if headers is not None:
+            event_data["headers"] = headers
         if jsonify:
             event_data["body"] = json.dumps(body)
             event_data["content_type"] = "application/json"

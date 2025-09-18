@@ -23,6 +23,8 @@ class Base(models.AbstractModel):
 
         :param str code: code of message to be sent
         :param any message: message to be sent.
+        :param str correlation_id: Correlation ID of message
+        :param dict headers: Headers for rabbit MQ message
         :param bool jsonify: If jsonify is True, message will be encoded as json automatically.
             Default: True.
         :param list[str]|str tags: tag or list of tags,
@@ -32,6 +34,7 @@ class Base(models.AbstractModel):
             code,
             message,
             correlation_id=correlation_id,
+            headers=headers,
             jsonify=jsonify,
             tags=tags,
         )
