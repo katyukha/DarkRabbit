@@ -10,6 +10,7 @@ class DarkRabbitOutgoingRouting(models.Model):
         string="Outgoing event type",
         required=True,
         index=True,
+        ondelete="cascade",
     )
 
     connection_id = fields.Many2one(
