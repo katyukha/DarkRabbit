@@ -45,7 +45,7 @@
 
     <menuitem action="action_dark_rabbit_outgoing_routing_list"
               id="menu_dark_rabbit_outgoing_routing"
-              sequence="10"
+              sequence="60"
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>
