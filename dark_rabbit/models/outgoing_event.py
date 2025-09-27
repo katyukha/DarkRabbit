@@ -3,6 +3,8 @@ import time
 
 from odoo import api, fields, models
 
+from odoo.addons.base_field_big_int import BigInt
+
 
 class DarkRabbitOutgoingEvent(models.Model):
     _name = "dark.rabbit.outgoing.event"
@@ -50,7 +52,7 @@ class DarkRabbitOutgoingEvent(models.Model):
         string="Correlation ID",
         help="Correlation ID for message properties.",
     )
-    timestamp = fields.BigInt(
+    timestamp = BigInt(
         index=True, readonly=True, help="Timestamp for message properties"
     )
     message_type = fields.Char(readonly=True, help="Type field for message properties")

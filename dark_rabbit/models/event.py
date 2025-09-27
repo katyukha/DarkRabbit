@@ -4,6 +4,8 @@ import traceback
 
 from odoo import api, fields, models
 
+from odoo.addons.base_field_big_int import BigInt
+
 _logger = logging.getLogger(__name__)
 
 
@@ -21,7 +23,7 @@ class DarkRabbitEvent(models.Model):
         readonly=True,
         help="Correlation ID from message properties.",
     )
-    timestamp = fields.BigInt(
+    timestamp = BigInt(
         index=True, readonly=True, help="Timestamp from message properties"
     )
     message_type = fields.Char(readonly=True, help="Type field from message properties")
