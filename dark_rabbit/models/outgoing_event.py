@@ -49,7 +49,9 @@ class DarkRabbitOutgoingEvent(models.Model):
         string="Correlation ID",
         help="Correlation ID for message properties.",
     )
-    timestamp = fields.Char(readonly=True, help="Timestamp for message properties")
+    timestamp = fields.BigInt(
+        index=True, readonly=True, help="Timestamp for message properties"
+    )
     message_type = fields.Char(readonly=True, help="Type field for message properties")
     content_type = fields.Char(readonly=True, help="Content type of incoming message")
 

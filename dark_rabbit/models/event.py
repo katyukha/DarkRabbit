@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class DarkRabbitEvent(models.Model):
     _name = "dark.rabbit.event"
     _description = "Dark Rabbit: Event"
-    _order = "create_date DESC"
+    _order = "create_date DESC, timestamp DESC"
 
     create_date = fields.Datetime(required=True, index=True, readonly=True)
     message_id = fields.Char(
@@ -21,7 +21,9 @@ class DarkRabbitEvent(models.Model):
         readonly=True,
         help="Correlation ID from message properties.",
     )
-    timestamp = fields.Char(readonly=True, help="Timestamp from message properties")
+    timestamp = fields.BigInt(
+        index=True, readonly=True, help="Timestamp from message properties"
+    )
     message_type = fields.Char(readonly=True, help="Type field from message properties")
     content_type = fields.Char(readonly=True, help="Content type of incoming message")
     connection_id = fields.Many2one(

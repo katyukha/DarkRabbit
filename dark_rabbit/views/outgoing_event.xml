@@ -59,11 +59,13 @@
         <field name="model">dark.rabbit.outgoing.event</field>
         <field name="arch" type="xml">
             <search>
-                <field name="body"/>
                 <field name="connection_id" />
                 <field name="outgoing_event_type_id"/>
                 <field name="exchange"/>
                 <field name="routing_key"/>
+                <field name="message_id"/>
+                <field name="message_type"/>
+                <field name="correlation_id"/>
                 <field name="created_at"/>
                 <field name="sent_at"/>
 
@@ -113,7 +115,7 @@
 
     <menuitem action="action_dark_rabbit_outgoing_event_list"
               id="menu_dark_rabbit_outgoing_event"
-              sequence="60"
+              sequence="70"
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>
