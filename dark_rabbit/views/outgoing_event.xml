@@ -5,6 +5,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="created_at"/>
+                <field name="timestamp"/>
                 <field name="outgoing_event_type_id"/>
                 <field name="connection_id"/>
                 <field name="exchange"/>
