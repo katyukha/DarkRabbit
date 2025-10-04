@@ -159,7 +159,6 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
                 continue
 
             if not publisher.can_send:
-                print(f"Message rate: {publisher.message_rate}")
                 events_skipped += 1
                 continue
 
