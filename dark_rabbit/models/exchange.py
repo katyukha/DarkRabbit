@@ -26,6 +26,12 @@ class Exchange(models.Model):
     )
     exchange_durable = fields.Boolean()
 
+    queue_binding_ids = fields.One2many(
+        comodel_name="dark.rabbit.queue.binding",
+        inverse_name="exchange_id",
+        string="Bind queue to exchanges via specified routing keys",
+    )
+
     active = fields.Boolean(default=True, index=True)
 
     def _get_exchange_config(self):

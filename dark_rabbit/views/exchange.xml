@@ -31,10 +31,20 @@
                             <field name="connection_id"/>
                             <field name="name"/>
                         </group>
-                        <group name="group_handler" string="Handler">
+                        <group>
+                        </group>
+                        <group name="group_declare" string="Declare">
                             <field name="exchange_declare"/>
                             <field name="exchange_durable"/>
-                            <field name="exchange_type"/>
+                            <field name="exchange_type" required="exchange_declare"/>
+                        </group>
+                        <group name="group_bindings" string="Bindings">
+                            <field name="queue_binding_ids" mode="list" nolabel="1">
+                                <list editable="bottom">
+                                    <field name="queue_id"/>
+                                    <field name="routing_key"/>
+                                </list>
+                            </field>
                         </group>
                     </group>
                 </sheet>

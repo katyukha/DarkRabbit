@@ -31,6 +31,13 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
+                        <button name="action_view_exchanges"
+                                type="object"
+                                class="oe_stat_button">
+                            <field string="Exchanges"
+                                   name="exchange_count"
+                                   widget="statinfo"/>
+                        </button>
                         <button name="action_view_queues"
                                 type="object"
                                 class="oe_stat_button">

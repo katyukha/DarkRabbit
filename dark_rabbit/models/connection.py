@@ -205,3 +205,11 @@ class DarkRabbitConnection(models.Model):
             domain=[("connection_id", "=", self.id)],
             context={"default_connection_id": self.id},
         )
+
+    def action_view_exchanges(self):
+        self.ensure_one()
+        return self.env["generic.mixin.get.action"].get_action_by_xmlid(
+            "dark_rabbit.action_dark_rabbit_exchange_list",
+            domain=[("connection_id", "=", self.id)],
+            context={"default_connection_id": self.id},
+        )

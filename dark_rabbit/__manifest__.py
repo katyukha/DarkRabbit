@@ -15,6 +15,7 @@
         "views/menu.xml",
         "views/connection.xml",
         "views/queue.xml",
+        "views/exchange.xml",
         "views/handler.xml",
         "views/event.xml",
         "views/outgoing_event.xml",
