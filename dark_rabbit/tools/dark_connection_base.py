@@ -57,11 +57,57 @@ class DarkRabbitConnectionBase:
         return self._suspended
 
     def connect(self):
+        if self._channel is not None and not self._channel.is_closed:
+            # It seems that connection already established. No further work needed.
+            return
+
         self._connection = pika.BlockingConnection(
             pika.URLParameters(self._config["connection_url"])
         )
         self._channel = self.connection.channel()
+
+        # TODO: Move binding and declare to separate method,
+        #       and call only once (at least for publisher)
+        self._declare_exchanges()
+        self._declare_queues()
+        self._bind_queues()
+
         self._suspended = False
+
+    def _declare_exchanges(self):
+        if declare_exchanges := self._config.get("declare", {}).get("exchanges"):
+            for exchange in declare_exchanges:
+                self.channel.exchange_declare(
+                    exchange=exchange["name"],
+                    exchange_type=exchange["type"],
+                    durable=exchange["durable"],
+                )
+
+    def _declare_queues(self):
+        if declare_queues := self._config.get("declare", {}).get("queues"):
+            for queue in declare_queues:
+                declare = queue.get("queue_declare", {})
+                arguments = {}
+                if declare_dlx := declare.get("dlx"):
+                    arguments["x-dead-letter-exchange"] = declare_dlx
+                if declare_dlq_routing := declare.get("dlq_routing"):
+                    arguments["x-dead-letter-routing-key"] = declare_dlq_routing
+                self.channel.queue_declare(
+                    queue=queue["queue_name"],
+                    durable=declare["durable"],
+                    exclusive=declare["exclusive"],
+                    auto_delete=declare["auto_delete"],
+                    arguments=arguments if arguments else None,
+                )
+
+    def _bind_queues(self):
+        if queue_bindings := self._config.get("declare", {}).get("queue_bindings"):
+            for qb in queue_bindings:
+                self.channel.queue_bind(
+                    queue=qb["queue_name"],
+                    exchange=qb["exchange_name"],
+                    routing_key=qb["routing_key"],
+                )
 
     def __enter__(self):
         return self

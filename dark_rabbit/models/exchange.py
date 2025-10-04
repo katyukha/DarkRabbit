@@ -12,6 +12,7 @@ class Exchange(models.Model):
         index=True,
         ondelete="cascade",
     )
+
     name = fields.Char(required=True, index=True)
 
     exchange_declare = fields.Boolean(string="Declare Exchange")
@@ -25,7 +26,9 @@ class Exchange(models.Model):
     )
     exchange_durable = fields.Boolean()
 
-    def get_exchange_config(self):
+    active = fields.Boolean(default=True, index=True)
+
+    def _get_exchange_config(self):
         return {
             "name": self.name,
             "declare": self.exchange_declare,

@@ -30,9 +30,15 @@ class DarkRabbitQueue(models.Model):
         string="Queue auto-delete",
         help="Automatically delete queue after consumer cancels or disconnects",
     )
-    queue_declare_dlx = fields.Char("Declare Dead Letter Exchange")
-    queue_declare_dlq = fields.Char("Declare Dead Letter Queue")
-    queue_declare_dlq_routing = fields.Char("Declare DLQ Routing")
+    queue_declare_dlx_id = fields.Many2one("dark.rabbit.exchange", string="DLX")
+    queue_declare_dlx = fields.Char(
+        string="DLX Name", related="queue_declare_dlx_id.name", readonly=True
+    )
+    queue_declare_dlq_id = fields.Many2one("dark.rabbit.queue", string="DLQ")
+    queue_declare_dlq = fields.Char(
+        string="DLQ Name", related="queue_declare_dlq_id.queue_name", readonly=True
+    )
+    queue_declare_dlq_routing = fields.Char("DLQ Routing")
 
     queue_binding_ids = fields.One2many(
         comodel_name="dark.rabbit.queue.binding",
@@ -73,13 +79,6 @@ class DarkRabbitQueue(models.Model):
             }
             if self.queue_declare
             else False,
-            "bindings": [
-                {
-                    "exchange_name": qb.exchange_name,
-                    "routing_key": qb.routing_key,
-                }
-                for qb in self.queue_binding_ids
-            ],
         }
 
     def action_view_events(self):
