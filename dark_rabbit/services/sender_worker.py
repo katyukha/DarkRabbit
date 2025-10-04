@@ -204,8 +204,8 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
             # Try to publish batch of events
             publish_res = self.publish_events()
 
-            if publish_res.skipped / publish_res.total > 0.1:
-                # It seems that we reached threshold, so we have to slow-down
+            if publish_res.total and publish_res.sent / publish_res.total < 0.9:
+                # It seems that too many events failed. Let's slow down.
                 self.sleep(SLOWDOWN_TIMEOUT)
 
             if not publish_res.total:
