@@ -2,6 +2,7 @@ from . import (
     base,
     connection,
     queue,
+    exchange,
     event,
     queue_binding,
     handler,

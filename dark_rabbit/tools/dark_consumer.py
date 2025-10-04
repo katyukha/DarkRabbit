@@ -71,6 +71,9 @@ class DarkRabbitConsumer(DarkRabbitConnectionBase):
     ):
         super().__init__(consumer_config)
 
+        # Explicitely start connection
+        self.connect()
+
         # This will start the connection
         self.channel.basic_qos(prefetch_count=prefetch_count)
 
@@ -78,41 +81,8 @@ class DarkRabbitConsumer(DarkRabbitConnectionBase):
 
         self._delivery_tags = []
 
-        # Configure listening on specified queues
+        # # Configure listening on specified queues
         for queue_config in self._config["listen_queues"]:
-            if declare := queue_config.get("queue_declare"):
-                arguments = {}
-                if declare_dlx := declare.get("dlx"):
-                    self.channel.exchange_declare(
-                        exchange=declare_dlx,
-                        exchange_type="direct",
-                        durable=True,
-                    )
-                    arguments["x-dead-letter-exchange"] = declare_dlx
-                if declare_dlq := declare.get("dlq"):
-                    self.channel.queue_declare(queue=declare_dlq, durable=True)
-                    self.channel.queue_bind(
-                        queue=declare["dlq"],
-                        exchange=declare["dlx"],
-                        routing_key=declare["dlq_routing"],
-                    )
-                    arguments["x-dead-letter-routing-key"] = declare["dlq_routing"]
-
-                self.channel.queue_declare(
-                    queue=queue_config["queue_name"],
-                    durable=declare["durable"],
-                    exclusive=declare["exclusive"],
-                    auto_delete=declare["auto_delete"],
-                    arguments=arguments if arguments else None,
-                )
-
-            for binding in queue_config.get("bindings", []):
-                self.channel.queue_bind(
-                    queue=queue_config["queue_name"],
-                    exchange=binding["exchange_name"],
-                    routing_key=binding["routing_key"],
-                )
-
             self._delivery_tags += self.channel.basic_consume(
                 queue=queue_config["queue_name"],
                 on_message_callback=DarkRabbitCallBack(

@@ -78,6 +78,15 @@
                         domain="[('error', '=', False)]"/>
                 <separator/>
 
+                <filter name="filter_sent"
+                        string="Sent"
+                        domain="[('sent_at', '!=', False)]"/>
+                <filter name="filter_not_sent"
+                        string="Not sent"
+                        domain="[('sent_at', '=', False)]"/>
+                <separator/>
+
+
                 <group expand="1" string="Group By">
                     <filter
                         string="Date"

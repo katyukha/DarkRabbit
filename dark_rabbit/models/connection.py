@@ -33,6 +33,10 @@ class DarkRabbitConnection(models.Model):
         comodel_name="dark.rabbit.queue", inverse_name="connection_id"
     )
     queue_count = fields.Integer(compute="_compute_queue_count", readonly=True)
+    exchange_ids = fields.One2many(
+        comodel_name="dark.rabbit.exchange", inverse_name="connection_id"
+    )
+    exchange_count = fields.Integer(compute="_compute_exchange_count", readonly=True)
     event_ids = fields.One2many(
         comodel_name="dark.rabbit.event", inverse_name="connection_id"
     )
@@ -55,6 +59,7 @@ class DarkRabbitConnection(models.Model):
         compute="_compute_outgoing_event_count",
         readonly=True,
     )
+    throttling_threshold = fields.Integer(string="Throttling threshold (msg/sec)")
 
     active = fields.Boolean(default=True, index=True)
 
@@ -65,6 +70,14 @@ class DarkRabbitConnection(models.Model):
         )
         for rec in self:
             rec.queue_count = mapped_data.get(rec.id, 0)
+
+    @api.depends("exchange_count")
+    def _compute_exchange_count(self):
+        mapped_data = read_counts_for_o2m(
+            records=self, field_name="exchange_ids", sudo=True
+        )
+        for rec in self:
+            rec.exchange_count = mapped_data.get(rec.id, 0)
 
     @api.depends("event_ids")
     def _compute_event_count(self):
@@ -90,6 +103,7 @@ class DarkRabbitConnection(models.Model):
         for rec in self:
             rec.outgoing_event_count = mapped_data.get(rec.id, 0)
 
+    @api.private
     def get_connection_url(self):
         self.ensure_one()
 
@@ -98,22 +112,49 @@ class DarkRabbitConnection(models.Model):
             f"{urllib.parse.quote_plus(self.virtual_host)}"
         )
 
+    def _get_declare_config(self):
+        return {
+            "exchanges": [
+                e._get_exchange_config()
+                for e in self.exchange_ids
+                if e.exchange_declare
+            ],
+            "queues": [q.get_queue_config() for q in self.queue_ids if q.queue_declare],
+            "queue_bindings": [
+                {
+                    "queue_name": qb.queue_id.queue_name,
+                    "exchange_name": qb.exchange_name,
+                    "routing_key": qb.routing_key,
+                }
+                for qb in self.mapped("queue_ids.queue_binding_ids")
+            ],
+        }
+
+    def _get_connection_config(self):
+        return {
+            "connection_id": self.id,
+            "connection_url": self.get_connection_url(),
+            "declare": self._get_declare_config(),
+        }
+
+    @api.private
     def get_consumer_config(self):
         """Return consumer config for background worker"""
         self.ensure_one()
-        return {
-            "connection_id": self.id,
-            "connection_url": self.get_connection_url(),
-            "listen_queues": [q.get_queue_config() for q in self.queue_ids if q.listen],
-        }
+        return dict(
+            self._get_connection_config(),
+            listen_queues=[q.get_queue_config() for q in self.queue_ids if q.listen],
+        )
 
+    @api.private
     def get_publisher_config(self):
         self.ensure_one()
-        return {
-            "connection_id": self.id,
-            "connection_url": self.get_connection_url(),
-        }
+        return dict(
+            self._get_connection_config(),
+            throttling_threshold=self.throttling_threshold,
+        )
 
+    @api.private
     def get_connection(self):
         self.ensure_one()
 
@@ -165,6 +206,14 @@ class DarkRabbitConnection(models.Model):
         self.ensure_one()
         return self.env["generic.mixin.get.action"].get_action_by_xmlid(
             "dark_rabbit.action_dark_rabbit_outgoing_routing_list",
+            domain=[("connection_id", "=", self.id)],
+            context={"default_connection_id": self.id},
+        )
+
+    def action_view_exchanges(self):
+        self.ensure_one()
+        return self.env["generic.mixin.get.action"].get_action_by_xmlid(
+            "dark_rabbit.action_dark_rabbit_exchange_list",
             domain=[("connection_id", "=", self.id)],
             context={"default_connection_id": self.id},
         )

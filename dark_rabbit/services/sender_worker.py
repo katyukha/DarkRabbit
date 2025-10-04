@@ -22,7 +22,13 @@ PUBLISHER_SLEEP_INTERVAL = 3  # seconds
 # How many events we have to send in one batch
 BATCH_PUBLISH = 100
 
-PublishResult = collections.namedtuple("PublishResult", ["total", "sent", "failed"])
+# Slowdown timout in seconds. Sleep for specified amount of time,
+# if we reached rate limit, or skip too much events
+SLOWDOWN_TIMEOUT = 0.3
+
+PublishResult = collections.namedtuple(
+    "PublishResult", ["total", "sent", "skipped", "failed"]
+)
 
 
 class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
@@ -79,6 +85,13 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
         self._publisher_registry.update_config(connections_map)
 
         self._reload_timestamp = time.time()
+
+    def reload_publishers_if_needed(self):
+        if (
+            self._reload_timestamp
+            and time.time() - self._reload_timestamp > RELOAD_PERIOD
+        ):
+            self.reload_publishers()
 
     def on_shutdown(self):
         # Close all connections on shutdown
@@ -145,6 +158,10 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
                 events_skipped += 1
                 continue
 
+            if not publisher.can_send:
+                events_skipped += 1
+                continue
+
             if publisher.scheduled_reload:
                 # Publisher is scheduled for reload, thus do not send events to
                 # that publisher anymore
@@ -164,7 +181,7 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
             else:
                 events_failed += 1
 
-        return PublishResult(events_total, events_sent, events_failed)
+        return PublishResult(events_total, events_sent, events_skipped, events_failed)
 
     def publish_events(self):
         """Try to publish batch of events
@@ -175,20 +192,20 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
             return self._publish_events(env)
 
     def run_service(self):
-        # Reload consumers if needed
-        if (
-            self._reload_timestamp
-            and time.time() - self._reload_timestamp > RELOAD_PERIOD
-        ):
-            self.reload_publishers()
-
         while not self._worker_event_stop.is_set():
+            # At first we reload publiahsers if needed
+            self.reload_publishers_if_needed()
+
             # Process Data Events. Do all necessary rabbit routines
             # (heartbeats, etc)
             self._publisher_registry.process_data_events()
 
             # Try to publish batch of events
             publish_res = self.publish_events()
+
+            if publish_res.total and publish_res.sent / publish_res.total < 0.9:
+                # It seems that too many events failed. Let's slow down.
+                self.sleep(SLOWDOWN_TIMEOUT)
 
             if not publish_res.total:
                 # We do not publish any event, so it seems that event queue is

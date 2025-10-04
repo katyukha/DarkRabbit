@@ -6,7 +6,7 @@
             <list>
                 <field name="connection_id"/>
                 <field name="outgoing_event_type_id"/>
-                <field name="exchange"/>
+                <field name="exchange_id"/>
                 <field name="routing_key"/>
                 <field name="active"/>
             </list>
@@ -28,7 +28,7 @@
                             <field name="outgoing_event_type_id"/>
                         </group>
                         <group>
-                            <field name="exchange"/>
+                            <field name="exchange_id"/>
                             <field name="routing_key"/>
                         </group>
                     </group>
