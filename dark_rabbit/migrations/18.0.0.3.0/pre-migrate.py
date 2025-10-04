@@ -90,12 +90,12 @@ def migrate(cr, version):
     cr.execute(
         """
         INSERT INTO dark_rabbit_queue
-            (connection_id, queue_name, queue_declare, queue_declare_durable)
-        SELECT connection_id, queue_declare_dlq, True, True
+            (connection_id, queue_name, queue_declare, queue_declare_durable, active)
+        SELECT connection_id, queue_declare_dlq, True, True, True
         FROM dark_rabbit_queue AS drq
         WHERE NOT EXISTS (
             SELECT 1 FROM dark_rabbit_queue AS drq_1
-            WHERE drq_1.queue_name = drq.queue_name
+            WHERE drq_1.queue_name = drq.queue_declare_dlq
               AND drq_1.connection_id = drq.connection_id
         );
 
