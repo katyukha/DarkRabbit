@@ -59,6 +59,7 @@ class DarkRabbitConnection(models.Model):
         compute="_compute_outgoing_event_count",
         readonly=True,
     )
+    throttling_threshold = fields.Integer(string="Throttling threshold (msg/sec)")
 
     active = fields.Boolean(default=True, index=True)
 
@@ -148,7 +149,10 @@ class DarkRabbitConnection(models.Model):
     @api.private
     def get_publisher_config(self):
         self.ensure_one()
-        return self._get_connection_config()
+        return dict(
+            self._get_connection_config(),
+            throttling_threshold=self.throttling_threshold,
+        )
 
     @api.private
     def get_connection(self):

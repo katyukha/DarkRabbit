@@ -86,6 +86,9 @@
                             <field name="user"/>
                             <field name="password" password="True"/>
                         </group>
+                        <group name="group_settings" string="Settings">
+                            <field name="throttling_threshold"/>
+                        </group>
                     </group>
                 </sheet>
             </form>
