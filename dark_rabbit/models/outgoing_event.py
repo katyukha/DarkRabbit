@@ -1,9 +1,13 @@
 import json
+import logging
 import time
+from typing import List
 
 from odoo import api, fields, models
 
 from odoo.addons.base_field_big_int import BigInt
+
+_logger = logging.getLogger(__name__)
 
 
 class DarkRabbitOutgoingEvent(models.Model):
@@ -80,7 +84,18 @@ class DarkRabbitOutgoingEvent(models.Model):
                 pretty = False
             record.body_json_pretty = pretty
 
-    def add(self, e_type, body, correlation_id=None, jsonify=True):
+    def add(
+        self,
+        e_type,
+        body,
+        correlation_id=None,
+        jsonify=True,
+        tags: List[str] | str = None,
+    ):
+        if tags and isinstance(tags, str):
+            tags = [tags]
+        tags = tags if tags else []
+
         event_type = (
             self.sudo()
             .env["dark.rabbit.outgoing.event.type"]
@@ -101,12 +116,17 @@ class DarkRabbitOutgoingEvent(models.Model):
             event_data["body"] = body
             event_data["content_type"] = "text/plain"
 
-        for routing_id in event_type.outgoing_routing_ids:
+        for route in event_type.outgoing_routing_ids:
+            if route.require_tag_code and route.require_tag_code not in tags:
+                # This route require tag but event does not have required tag,
+                # thus we skip this route.
+                continue
+
             self.sudo().env["dark.rabbit.outgoing.event"].create(
                 dict(
                     event_data,
-                    connection_id=routing_id.connection_id.id,
-                    exchange=routing_id.exchange,
-                    routing_key=routing_id.routing_key,
+                    connection_id=route.connection_id.id,
+                    exchange=route.exchange,
+                    routing_key=route.routing_key,
                 )
             )

@@ -1,6 +1,6 @@
 {
     "name": "Dark Rabbit",
-    "version": "18.0.0.3.2",
+    "version": "18.0.0.3.3",
     "license": "LGPL-3",
     "summary": "Rabbit from Dark Side. Brings some dark magic to your messaging.",
     "category": "Technical Settings",
@@ -19,7 +19,9 @@
         "views/handler.xml",
         "views/event.xml",
         "views/outgoing_event.xml",
+        "views/outgoing_event_type.xml",
         "views/outgoing_routing.xml",
+        "views/outgoing_routing_tag.xml",
         "data/ir_actions_server.xml",
     ],
     "images": ["static/description/icon.png"],

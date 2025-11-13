@@ -5,6 +5,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="body"/>
+                <field name="tag_id"/>
             </list>
         </field>
     </record>
@@ -15,7 +16,10 @@
             <form>
                 <sheet>
                     <group>
-                    <field name="body"/>
+                        <field name="body"/>
+                    </group>
+                    <group>
+                        <field name="tag_id"/>
                     </group>
                 </sheet>
             </form>
