@@ -6,6 +6,7 @@
             <list>
                 <field name="connection_id"/>
                 <field name="outgoing_event_type_id"/>
+                <field name="require_tag_id"/>
                 <field name="exchange_id"/>
                 <field name="routing_key"/>
                 <field name="active"/>
@@ -28,6 +29,7 @@
                             <field name="outgoing_event_type_id"/>
                         </group>
                         <group>
+                            <field name="require_tag_id"/>
                             <field name="exchange_id"/>
                             <field name="routing_key"/>
                         </group>
@@ -37,7 +39,28 @@
         </field>
     </record>
 
-<record id="action_dark_rabbit_outgoing_routing_list" model="ir.actions.act_window">
+    <record id="view_dark_rabbit_outgoing_routing_search" model="ir.ui.view">
+        <field name="model">dark.rabbit.outgoing.routing</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="connection_id"/>
+                <field name="outgoing_event_type_id"/>
+                <field name="require_tag_id"/>
+                <field name="exchange_id"/>
+                <field name="routing_key"/>
+
+                <filter name="filter_active"
+                        string="Active"
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_archived"
+                        string="Archived"
+                        domain="[('active', '=', False)]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_dark_rabbit_outgoing_routing_list" model="ir.actions.act_window">
         <field name="name">Dark Rabbit Outgoing Routing</field>
         <field name="res_model">dark.rabbit.outgoing.routing</field>
         <field name="view_mode">list,form</field>

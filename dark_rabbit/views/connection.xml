@@ -95,6 +95,24 @@
         </field>
     </record>
 
+    <record id="view_dark_rabbit_connection_search" model="ir.ui.view">
+        <field name="model">dark.rabbit.connection</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+
+                <filter name="filter_active"
+                        string="Active"
+                        domain="[('active', '=', True)]"/>
+                <filter name="filter_archived"
+                        string="Archived"
+                        domain="[('active', '=', False)]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
     <record id="action_dark_rabbit_connection_list" model="ir.actions.act_window">
         <field name="name">Dark Rabbit Connection</field>
         <field name="res_model">dark.rabbit.connection</field>

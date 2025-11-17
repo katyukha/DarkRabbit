@@ -30,6 +30,12 @@ class DarkRabbitOutgoingRouting(models.Model):
         readonly=True,
         store=False,
     )
+    require_tag_id = fields.Many2one(
+        comodel_name="dark.rabbit.outgoing.routing.tag", index=True
+    )
+    require_tag_code = fields.Char(
+        related="require_tag_id.code", store=True, index=True, readonly=True
+    )
 
     routing_key = fields.Char(string="Routing Key", required=True, index=True)
 

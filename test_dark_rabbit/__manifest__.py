@@ -2,7 +2,7 @@
     "name": "Dark Rabbit (Tests)",
     "summary": "Can you see Dark Rabbit? Smile, it is just behind your back)",
     "category": "Hidden",
-    "version": "18.0.0.1.5",
+    "version": "18.0.0.1.6",
     "depends": [
         "dark_rabbit",
     ],
