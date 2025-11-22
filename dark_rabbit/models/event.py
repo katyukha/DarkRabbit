@@ -103,7 +103,7 @@ class DarkRabbitEvent(models.Model):
     def action_retry_handle(self):
         """Run event handler one more time for events that has handler defined"""
         for record in self.search(
-            [("id", "in", self.ids)], order="create_date ASC, timestamp ASC, id ASC"
+            [("id", "in", self.ids)], order="timestamp ASC, id ASC"
         ):
             if record.handler_id:
                 record.handler_id._dark_rabbit_handle_event(record)
