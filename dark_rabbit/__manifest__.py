@@ -1,6 +1,6 @@
 {
     "name": "Dark Rabbit",
-    "version": "18.0.0.3.4",
+    "version": "18.0.0.3.5",
     "license": "LGPL-3",
     "summary": "Rabbit from Dark Side. Brings some dark magic to your messaging.",
     "category": "Technical Settings",
