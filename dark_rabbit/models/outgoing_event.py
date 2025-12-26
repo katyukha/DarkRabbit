@@ -84,6 +84,17 @@ class DarkRabbitOutgoingEvent(models.Model):
                 pretty = False
             record.body_json_pretty = pretty
 
+    def init(self):
+        self.env.cr.execute(
+            """
+            -- Index used by event sender to search for new events to be sent.
+            CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__sender_search__idx
+                 ON dark_rabbit_outgoing_event ("created_at", "timestamp", "id")
+                 WHERE sent_at IS NULL;
+            """
+        )
+        return super().init()
+
     def add(
         self,
         e_type,
