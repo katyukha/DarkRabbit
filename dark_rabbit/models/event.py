@@ -16,11 +16,15 @@ class DarkRabbitEvent(models.Model):
 
     create_date = fields.Datetime(required=True, index=True, readonly=True)
     message_id = fields.Char(
-        string="Message ID", readonly=True, help="Message ID from message properties"
+        string="Message ID",
+        index="btree_not_null",
+        readonly=True,
+        help="Message ID from message properties",
     )
     correlation_id = fields.Char(
         string="Correlation ID",
         readonly=True,
+        index="btree_not_null",
         help="Correlation ID from message properties.",
     )
     timestamp = BigInt(

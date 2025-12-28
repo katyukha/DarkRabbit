@@ -43,8 +43,8 @@
                             <field name="timestamp"/>
                             <field name="routing_key"/>
                             <field name="message_type"/>
-                            <field name="message_id"/>
-                            <field name="correlation_id"/>
+                            <field name="message_id" widget="CopyClipboardChar"/>
+                            <field name="correlation_id" widget="CopyClipboardChar"/>
                             <field name="content_type"/>
                         </group>
                         <group colspan="2" string="Body">
@@ -67,9 +67,9 @@
             <search>
                 <field name="create_date"/>
                 <field name="routing_key"/>
-                <field name="message_id"/>
-                <field name="correlation_id"/>
-                <field name="connection_id" />
+                <field name="message_id" operator="="/>
+                <field name="correlation_id" operator="="/>
+                <field name="connection_id"/>
                 <field name="queue_id"/>
                 <field name="handler_id"/>
 
@@ -117,7 +117,7 @@
                 </group>
 
                 <searchpanel view_types="list,pivot,graph">
-                    <field name="connection_id" string="Connection" select="multi"/>
+                    <field name="connection_id" string="Connection" select="multi" expand="1"/>
                     <field name="queue_id" string="Queue" select="multi"/>
                     <field name="handler_id" string="Handler" select="multi"/>
                 </searchpanel>

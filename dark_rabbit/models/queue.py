@@ -8,7 +8,7 @@ class DarkRabbitQueue(models.Model):
 
     _name = "dark.rabbit.queue"
     _description = "Dark Rabbit: Queue"
-    _order = "connection_id, queue_name"
+    _order = "queue_name"
     _rec_name = "queue_name"
 
     connection_id = fields.Many2one(
