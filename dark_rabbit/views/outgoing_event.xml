@@ -38,8 +38,8 @@
                             <field name="timestamp"/>
                             <field name="sent_at"/>
                             <field name="message_type"/>
-                            <field name="message_id"/>
-                            <field name="correlation_id"/>
+                            <field name="message_id" widget="CopyClipboardChar"/>
+                            <field name="correlation_id" widget="CopyClipboardChar"/>
                             <field name="content_type"/>
                         </group>
                         <group colspan="2" string="Body">
@@ -64,9 +64,9 @@
                 <field name="outgoing_event_type_id"/>
                 <field name="exchange"/>
                 <field name="routing_key"/>
-                <field name="message_id"/>
+                <field name="correlation_id" operator="="/>
+                <field name="message_id" operator="="/>
                 <field name="message_type"/>
-                <field name="correlation_id"/>
                 <field name="created_at"/>
                 <field name="sent_at"/>
 
@@ -111,8 +111,8 @@
                 </group>
 
                 <searchpanel view_types="list,pivot,graph">
-                    <field name="connection_id" string="Connection" select="multi"/>
-                    <field name="outgoing_event_type_id" string="Outgoing Event Type" select="multi"/>
+                    <field name="connection_id" string="Connection" select="multi" expand="1"/>
+                    <field name="outgoing_event_type_id" string="Outgoing Event Type" select="multi" expand="1"/>
                 </searchpanel>
             </search>
         </field>

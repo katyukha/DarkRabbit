@@ -43,7 +43,7 @@ class DarkRabbitOutgoingEvent(models.Model):
 
     routing_key = fields.Char(required=True, index=True, readonly=True)
     message_id = fields.Char(
-        index=True,
+        index="btree_not_null",
         required=True,
         readonly=True,
         size=38,
@@ -52,6 +52,7 @@ class DarkRabbitOutgoingEvent(models.Model):
         string="Message Id",
     )
     correlation_id = fields.Char(
+        index="btree_not_null",
         readonly=True,
         string="Correlation ID",
         help="Correlation ID for message properties.",
