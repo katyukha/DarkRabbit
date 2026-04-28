@@ -1,5 +1,7 @@
 import logging
 
+import pika.exceptions
+
 from .dark_connection_base import DEFAULT_PROCESS_EVENTS_TIME_LIMIT
 
 _logger = logging.getLogger(__name__)
@@ -22,8 +24,6 @@ class DarkConnectionPool:
         # Dict: {conn_id: DarkRabbitConnectionBase}
         self._registry = {}
         self._connection_factory = connection_factory
-
-        # TODO: Also, handle correctly heartbeats
         self._process_data_events_timelimit = process_data_events_timelimit
 
     @property
@@ -91,15 +91,21 @@ class DarkConnectionPool:
                 connection.process_data_events(
                     time_limit=self._process_data_events_timelimit
                 )
+            except pika.exceptions.AMQPHeartbeatTimeout:
+                _logger.error(
+                    "Heartbeat timeout on connection %s —"
+                    " TCP connection is dead, scheduling reload",
+                    connection.connection_id,
+                    exc_info=True,
+                )
+                connection.schedule_reload()
             except ValueError as e:
                 _logger.error(
-                    "Error while process events (conn_id=%s)",
+                    "Error while processing events (conn_id=%s)",
                     connection.connection_id,
                     exc_info=True,
                 )
                 if str(e) == "Timeout closed before call":
-                    # It seems that connection was closed, so in this case we
-                    # just schedule connection reload
                     connection.schedule_reload()
                     continue
                 raise
