@@ -71,7 +71,7 @@ class DarkRabbitConnection(models.Model):
         for rec in self:
             rec.queue_count = mapped_data.get(rec.id, 0)
 
-    @api.depends("exchange_count")
+    @api.depends("exchange_ids")
     def _compute_exchange_count(self):
         mapped_data = read_counts_for_o2m(
             records=self, field_name="exchange_ids", sudo=True
