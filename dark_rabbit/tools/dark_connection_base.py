@@ -3,6 +3,7 @@ import logging
 import pika
 
 DEFAULT_PROCESS_EVENTS_TIME_LIMIT = 0.2
+DEFAULT_PIKA_HEARTBEAT = 60
 
 _logger = logging.getLogger(__name__)
 
@@ -61,9 +62,15 @@ class DarkRabbitConnectionBase:
             # It seems that connection already established. No further work needed.
             return
 
-        self._connection = pika.BlockingConnection(
-            pika.URLParameters(self._config["connection_url"])
-        )
+        params = pika.URLParameters(self._config["connection_url"])
+        # heartbeat=None means "accept whatever the server proposes" —
+        # if the server is configured with heartbeat=0, detection is
+        # silently disabled. heartbeat=0 explicitly disables it too.
+        # In both cases enforce a minimum so dead TCP connections are
+        # always detected regardless of server configuration.
+        if not params.heartbeat:
+            params.heartbeat = DEFAULT_PIKA_HEARTBEAT
+        self._connection = pika.BlockingConnection(params)
         self._channel = self.connection.channel()
 
         # TODO: Move binding and declare to separate method,
