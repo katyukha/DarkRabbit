@@ -28,7 +28,7 @@ class DarkRabbitOutgoingRouting(models.Model):
         required=False,
         index=False,
         readonly=True,
-        store=False,
+        store=True,
     )
     require_tag_id = fields.Many2one(
         comodel_name="dark.rabbit.outgoing.routing.tag", index=True
