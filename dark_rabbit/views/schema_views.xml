@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dark_rabbit_schema_list" model="ir.ui.view">
+        <field name="model">dark.rabbit.schema</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dark_rabbit_schema_form" model="ir.ui.view">
+        <field name="model">dark.rabbit.schema</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <field name="name"
+                               nolabel="1"
+                               placeholder="Schema name…"/>
+                    </div>
+                    <group>
+                        <field name="spec"
+                               nolabel="1"
+                               widget="ace"
+                               options="{'mode': 'yaml'}"
+                               placeholder="exchanges:&#10;  - name: my.events&#10;    type: topic&#10;    durable: true&#10;&#10;queues:&#10;  - name: my.tasks&#10;    durable: true&#10;    bindings:&#10;      - exchange: my.events&#10;        routing_key: &quot;my.tasks.*&quot;"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dark_rabbit_schema_list" model="ir.actions.act_window">
+        <field name="name">Schemas</field>
+        <field name="res_model">dark.rabbit.schema</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem action="action_dark_rabbit_schema_list"
+              id="menu_dark_rabbit_schema"
+              sequence="15"
+              parent="dark_rabbit.menu_dark_rabbit_root"/>
+
+</odoo>

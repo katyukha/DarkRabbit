@@ -11,4 +11,5 @@ from . import (
     outgoing_event_type,
     outgoing_routing,
     outgoing_routing_tag,
+    schema,
 )

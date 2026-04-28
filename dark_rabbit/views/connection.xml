@@ -28,6 +28,9 @@
                             type="object"
                             class="oe_highlight"
                             string="Test Connection"/>
+                    <button name="action_open_apply_schema_wizard"
+                            type="object"
+                            string="Apply Schema"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
