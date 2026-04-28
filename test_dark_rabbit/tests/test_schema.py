@@ -6,8 +6,10 @@ Covers:
   - Wizard reconcile: create missing, update drifted, skip existing
   - Wizard end-to-end with multiple schemas
 """
+import psycopg2.errors
+
 from odoo.exceptions import UserError, ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, mute_logger
 
 from odoo.addons.dark_rabbit.tools.rabbit_schema_spec import (
     SchemaConflictError,
@@ -311,8 +313,10 @@ class TestSchemaModel(TransactionCase):
 
     def test_duplicate_name_raises(self):
         _make_schema(self.env, "dup.schema", "")
-        with self.assertRaises(ValidationError):
-            _make_schema(self.env, "dup.schema", "")
+        with mute_logger("odoo.sql_db"):
+            with self.assertRaises(psycopg2.errors.UniqueViolation):
+                with self.env.cr.savepoint():
+                    _make_schema(self.env, "dup.schema", "")
 
 
 # ---------------------------------------------------------------------------
