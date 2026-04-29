@@ -14,7 +14,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/menu.xml",
-        "views/schema_views.xml",
+        "views/schema.xml",
         "views/connection.xml",
         "views/queue.xml",
         "views/exchange.xml",
@@ -24,7 +24,7 @@
         "views/outgoing_event_type.xml",
         "views/outgoing_routing.xml",
         "views/outgoing_routing_tag.xml",
-        "views/apply_schema_wizard_views.xml",
+        "wizards/apply_schema_wizard.xml",
         "data/ir_actions_server.xml",
     ],
     "images": ["static/description/icon.png"],
