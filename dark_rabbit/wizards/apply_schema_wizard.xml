@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dark_rabbit_apply_schema_wizard_form"
+            model="ir.ui.view">
+        <field name="model">dark.rabbit.apply.schema.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Apply Schema">
+                <group>
+                    <field name="connection_id"/>
+                    <field name="schema_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="action_apply"
+                            type="object"
+                            string="Apply"
+                            class="btn-primary"/>
+                    <button special="cancel"
+                            string="Cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dark_rabbit_apply_schema_wizard"
+            model="ir.actions.act_window">
+        <field name="name">Apply Schema</field>
+        <field name="res_model">dark.rabbit.apply.schema.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
