@@ -4,8 +4,8 @@
         <field name="model">dark.rabbit.handler</field>
         <field name="arch" type="xml">
             <list>
-                <field name="handler_code"/>
                 <field name="name"/>
+                <field name="handler_code" optional="hide"/>
                 <field name="model_id"/>
                 <field name="method_name"/>
             </list>
