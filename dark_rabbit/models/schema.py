@@ -23,6 +23,13 @@ class DarkRabbitSchema(models.Model):
         ("name_uniq", "UNIQUE(name)", "Schema name must be unique."),
     ]
 
+    def action_open_fill_schema_wizard(self):
+        self.ensure_one()
+        return self.env["generic.mixin.get.action"].get_action_by_xmlid(
+            "dark_rabbit.action_dark_rabbit_fill_schema_wizard",
+            context={"default_schema_id": self.id},
+        )
+
     @api.constrains("spec")
     def _check_spec(self):
         for rec in self:

@@ -152,6 +152,63 @@ def parse_yaml(text: str) -> RabbitSchemaSpec:
 
 
 # ---------------------------------------------------------------------------
+# Serialisation
+# ---------------------------------------------------------------------------
+
+
+def to_yaml(spec: RabbitSchemaSpec) -> str:
+    """Serialise a RabbitSchemaSpec back to a YAML string.
+
+    Only non-default values are emitted to keep the output concise.
+    Defaults: declare=True, type='topic', durable=True, exclusive=False,
+    auto_delete=False.
+    """
+    data: dict = {}
+
+    if spec.exchanges:
+        data["exchanges"] = []
+        for ex in spec.exchanges.values():
+            entry: dict = {"name": ex.name}
+            if not ex.declare:
+                entry["declare"] = False
+            if ex.type != "topic":
+                entry["type"] = ex.type
+            if not ex.durable:
+                entry["durable"] = False
+            data["exchanges"].append(entry)
+
+    if spec.queues:
+        data["queues"] = []
+        for q in spec.queues.values():
+            entry = {"name": q.name}
+            if not q.declare:
+                entry["declare"] = False
+            if not q.durable:
+                entry["durable"] = False
+            if q.exclusive:
+                entry["exclusive"] = True
+            if q.auto_delete:
+                entry["auto_delete"] = True
+            if q.dlx:
+                entry["dlx"] = q.dlx
+            if q.dlq_routing:
+                entry["dlq_routing"] = q.dlq_routing
+            if q.bindings:
+                entry["bindings"] = [
+                    {"exchange": b.exchange, "routing_key": b.routing_key}
+                    for b in q.bindings
+                ]
+            data["queues"].append(entry)
+
+    if not data:
+        return ""
+
+    return yaml.dump(
+        data, default_flow_style=False, allow_unicode=True, sort_keys=False
+    )
+
+
+# ---------------------------------------------------------------------------
 # Merging
 # ---------------------------------------------------------------------------
 

@@ -1,6 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_dark_rabbit_schema,dark_rabbit_schema,model_dark_rabbit_schema,base.group_system,1,1,1,1
 access_dark_rabbit_apply_schema_wizard,dark_rabbit_apply_schema_wizard,model_dark_rabbit_apply_schema_wizard,base.group_system,1,1,1,1
+access_dark_rabbit_fill_schema_wizard,dark_rabbit_fill_schema_wizard,model_dark_rabbit_fill_schema_wizard,base.group_system,1,1,1,1
 access_dark_rabbit_connection,dark_rabbit_connection,model_dark_rabbit_connection,base.group_system,1,1,1,1
 access_dark_rabbit_queue,dark_rabbit_queue,model_dark_rabbit_queue,base.group_system,1,1,1,1
 access_dark_rabbit_exchange,dark_rabbit_exchange,model_dark_rabbit_exchange,base.group_system,1,1,1,1

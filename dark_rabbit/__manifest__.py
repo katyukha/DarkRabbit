@@ -25,6 +25,7 @@
         "views/outgoing_routing.xml",
         "views/outgoing_routing_tag.xml",
         "wizards/apply_schema_wizard.xml",
+        "wizards/fill_schema_wizard.xml",
         "data/ir_actions_server.xml",
     ],
     "images": ["static/description/icon.png"],
