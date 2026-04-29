@@ -159,36 +159,33 @@ def parse_yaml(text: str) -> RabbitSchemaSpec:
 def to_yaml(spec: RabbitSchemaSpec) -> str:
     """Serialise a RabbitSchemaSpec back to a YAML string.
 
-    Only non-default values are emitted to keep the output concise.
-    Defaults: declare=True, type='topic', durable=True, exclusive=False,
-    auto_delete=False.
+    All fields are always emitted explicitly — including those that equal
+    the parse_yaml() defaults — so the output is self-documenting and easy
+    to edit without knowing what the defaults are.
     """
     data: dict = {}
 
     if spec.exchanges:
-        data["exchanges"] = []
-        for ex in spec.exchanges.values():
-            entry: dict = {"name": ex.name}
-            if not ex.declare:
-                entry["declare"] = False
-            if ex.type != "topic":
-                entry["type"] = ex.type
-            if not ex.durable:
-                entry["durable"] = False
-            data["exchanges"].append(entry)
+        data["exchanges"] = [
+            {
+                "name": ex.name,
+                "declare": ex.declare,
+                "type": ex.type,
+                "durable": ex.durable,
+            }
+            for ex in spec.exchanges.values()
+        ]
 
     if spec.queues:
         data["queues"] = []
         for q in spec.queues.values():
-            entry = {"name": q.name}
-            if not q.declare:
-                entry["declare"] = False
-            if not q.durable:
-                entry["durable"] = False
-            if q.exclusive:
-                entry["exclusive"] = True
-            if q.auto_delete:
-                entry["auto_delete"] = True
+            entry: dict = {
+                "name": q.name,
+                "declare": q.declare,
+                "durable": q.durable,
+                "exclusive": q.exclusive,
+                "auto_delete": q.auto_delete,
+            }
             if q.dlx:
                 entry["dlx"] = q.dlx
             if q.dlq_routing:
