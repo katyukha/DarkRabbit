@@ -51,11 +51,20 @@ queues:
   durable: <bool>       # default: true
   exclusive: <bool>     # default: false
   auto_delete: <bool>   # default: false
+  listen: <bool>        # default: false — subscribe to incoming messages
+  listen_exclusive: <bool>  # default: false — no other consumers allowed
+  handler: <string>     # optional — handler code: model.name:method_name
   dlx: <string>         # dead-letter exchange name (optional)
   dlq_routing: <string> # dead-letter routing key (optional)
   bindings:
     - exchange: <string>    # required
       routing_key: <string> # default: ""
+
+outgoing_routings:
+- event_type: <string>  # outgoing event type code (required)
+  exchange: <string>    # exchange name (required)
+  routing_key: <string> # required
+  require_tag: <string> # outgoing routing tag code (optional)
                             ]]></code></pre>
                             <hr/>
                             <div class="pd-4">

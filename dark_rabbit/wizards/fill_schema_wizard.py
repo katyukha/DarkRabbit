@@ -5,6 +5,7 @@ from odoo import api, fields, models
 from ..tools.rabbit_schema_spec import (
     BindingSpec,
     ExchangeSpec,
+    OutgoingRoutingSpec,
     QueueSpec,
     RabbitSchemaSpec,
     to_yaml,
@@ -41,10 +42,30 @@ def _spec_from_connection(connection) -> RabbitSchemaSpec:
             auto_delete=q.queue_declare_auto_delete,
             dlx=q.queue_declare_dlx or None,
             dlq_routing=q.queue_declare_dlq_routing or None,
+            handler=q.handler_id.handler_code or None,
+            listen=q.listen,
+            listen_exclusive=q.listen_exclusive,
             bindings=bindings,
         )
 
-    return RabbitSchemaSpec(exchanges=exchanges, queues=queues)
+    outgoing_routings = []
+    for r in connection.env["dark.rabbit.outgoing.routing"].search(
+        [("connection_id", "=", connection.id), ("active", "=", True)]
+    ):
+        if not r.outgoing_event_type_id.code or not r.exchange or not r.routing_key:
+            continue
+        outgoing_routings.append(
+            OutgoingRoutingSpec(
+                event_type=r.outgoing_event_type_id.code,
+                exchange=r.exchange,
+                routing_key=r.routing_key,
+                require_tag=r.require_tag_code or None,
+            )
+        )
+
+    return RabbitSchemaSpec(
+        exchanges=exchanges, queues=queues, outgoing_routings=outgoing_routings
+    )
 
 
 class FillSchemaFromConnectionWizard(models.TransientModel):

@@ -54,8 +54,8 @@ class ApplySchemaWizard(models.TransientModel):
     def _reconcile(self, connection, spec: RabbitSchemaSpec):
         """Reconcile merged spec against existing DB records on the connection.
 
-        Creates missing entities and updates drifted fields.  Bindings are
-        additive — existing bindings are never removed.
+        Creates missing entities and updates drifted fields.  Bindings and
+        outgoing routings are additive — existing ones are never removed.
 
         Exchanges are processed before queues so DLX references can be
         resolved within the same apply.
@@ -99,6 +99,8 @@ class ApplySchemaWizard(models.TransientModel):
                 "queue_declare_durable": q_spec.durable,
                 "queue_declare_exclusive": q_spec.exclusive,
                 "queue_declare_auto_delete": q_spec.auto_delete,
+                "listen": q_spec.listen,
+                "listen_exclusive": q_spec.listen_exclusive,
             }
             if q_spec.dlx:
                 dlx = Exchange.search(
@@ -121,6 +123,20 @@ class ApplySchemaWizard(models.TransientModel):
                 vals["queue_declare_dlx_id"] = dlx.id
             if q_spec.dlq_routing:
                 vals["queue_declare_dlq_routing"] = q_spec.dlq_routing
+            if q_spec.handler:
+                handler = self.env["dark.rabbit.handler"].search(
+                    [("handler_code", "=", q_spec.handler)], limit=1
+                )
+                if not handler:
+                    raise UserError(
+                        _(
+                            "Queue %(queue)s: handler %(handler)s not found. "
+                            "Make sure the module that registers it is installed.",
+                            queue=q_spec.name,
+                            handler=q_spec.handler,
+                        )
+                    )
+                vals["handler_id"] = handler.id
 
             if not queue:
                 queue = Queue.create(
@@ -168,3 +184,76 @@ class ApplySchemaWizard(models.TransientModel):
                             "routing_key": b_spec.routing_key,
                         }
                     )
+
+        # --- outgoing routings ---
+        self._reconcile_outgoing_routings(connection, spec)
+
+    def _reconcile_outgoing_routings(self, connection, spec: RabbitSchemaSpec):
+        OutgoingRouting = self.env["dark.rabbit.outgoing.routing"]
+        EventType = self.env["dark.rabbit.outgoing.event.type"]
+        Exchange = self.env["dark.rabbit.exchange"]
+        Tag = self.env["dark.rabbit.outgoing.routing.tag"]
+
+        for r_spec in spec.outgoing_routings:
+            event_type = EventType.search([("code", "=", r_spec.event_type)], limit=1)
+            if not event_type:
+                raise UserError(
+                    _(
+                        "Outgoing routing: event type %(code)s not found. "
+                        "Make sure the module that defines it is installed.",
+                        code=r_spec.event_type,
+                    )
+                )
+
+            exchange = Exchange.search(
+                [
+                    ("connection_id", "=", connection.id),
+                    ("name", "=", r_spec.exchange),
+                ],
+                limit=1,
+            )
+            if not exchange:
+                raise UserError(
+                    _(
+                        "Outgoing routing for %(event_type)s: exchange "
+                        "%(exchange)s does not exist on this connection. "
+                        "Add it to a schema and apply.",
+                        event_type=r_spec.event_type,
+                        exchange=r_spec.exchange,
+                    )
+                )
+
+            require_tag_id = False
+            if r_spec.require_tag:
+                tag = Tag.search([("code", "=", r_spec.require_tag)], limit=1)
+                if not tag:
+                    raise UserError(
+                        _(
+                            "Outgoing routing for %(event_type)s: "
+                            "tag %(tag)s not found.",
+                            event_type=r_spec.event_type,
+                            tag=r_spec.require_tag,
+                        )
+                    )
+                require_tag_id = tag.id
+
+            exists = OutgoingRouting.search(
+                [
+                    ("outgoing_event_type_id", "=", event_type.id),
+                    ("connection_id", "=", connection.id),
+                    ("exchange_id", "=", exchange.id),
+                    ("routing_key", "=", r_spec.routing_key),
+                    ("require_tag_id", "=", require_tag_id),
+                ],
+                limit=1,
+            )
+            if not exists:
+                OutgoingRouting.create(
+                    {
+                        "outgoing_event_type_id": event_type.id,
+                        "connection_id": connection.id,
+                        "exchange_id": exchange.id,
+                        "routing_key": r_spec.routing_key,
+                        "require_tag_id": require_tag_id,
+                    }
+                )
