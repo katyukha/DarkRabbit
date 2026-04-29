@@ -48,6 +48,14 @@ class ExchangeSpec:
 
 
 @dataclass
+class OutgoingRoutingSpec:
+    event_type: str
+    exchange: str
+    routing_key: str
+    require_tag: str | None = None
+
+
+@dataclass
 class QueueSpec:
     name: str
     declare: bool = True
@@ -56,6 +64,9 @@ class QueueSpec:
     auto_delete: bool = False
     dlx: str | None = None
     dlq_routing: str | None = None
+    handler: str | None = None
+    listen: bool = False
+    listen_exclusive: bool = False
     bindings: list[BindingSpec] = field(default_factory=list)
 
 
@@ -63,6 +74,7 @@ class QueueSpec:
 class RabbitSchemaSpec:
     exchanges: dict[str, ExchangeSpec] = field(default_factory=dict)
     queues: dict[str, QueueSpec] = field(default_factory=dict)
+    outgoing_routings: list[OutgoingRoutingSpec] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -111,7 +123,34 @@ def _parse_queue(raw: dict) -> QueueSpec:
         auto_delete=bool(raw.get("auto_delete", False)),
         dlx=raw.get("dlx") or None,
         dlq_routing=raw.get("dlq_routing") or None,
+        handler=raw.get("handler") or None,
+        listen=bool(raw.get("listen", False)),
+        listen_exclusive=bool(raw.get("listen_exclusive", False)),
         bindings=bindings,
+    )
+
+
+def _parse_outgoing_routing(raw: dict) -> OutgoingRoutingSpec:
+    event_type = raw.get("event_type", "").strip()
+    if not event_type:
+        raise ValueError(
+            "Outgoing routing entry is missing required field 'event_type'"
+        )
+    exchange = raw.get("exchange", "").strip()
+    if not exchange:
+        raise ValueError(
+            f"Outgoing routing for {event_type!r}: missing required field 'exchange'"
+        )
+    routing_key = raw.get("routing_key", "").strip()
+    if not routing_key:
+        raise ValueError(
+            f"Outgoing routing for {event_type!r}: missing required field 'routing_key'"
+        )
+    return OutgoingRoutingSpec(
+        event_type=event_type,
+        exchange=exchange,
+        routing_key=routing_key,
+        require_tag=raw.get("require_tag") or None,
     )
 
 
@@ -148,7 +187,19 @@ def parse_yaml(text: str) -> RabbitSchemaSpec:
             raise ValueError(f"Duplicate queue {q.name!r} within the same spec")
         queues[q.name] = q
 
-    return RabbitSchemaSpec(exchanges=exchanges, queues=queues)
+    outgoing_routings: list[OutgoingRoutingSpec] = []
+    seen_routing_keys: set[tuple] = set()
+    for raw in data.get("outgoing_routings") or []:
+        r = _parse_outgoing_routing(raw)
+        key = (r.event_type, r.exchange, r.routing_key, r.require_tag)
+        if key in seen_routing_keys:
+            raise ValueError(f"Duplicate outgoing routing {key!r} within the same spec")
+        seen_routing_keys.add(key)
+        outgoing_routings.append(r)
+
+    return RabbitSchemaSpec(
+        exchanges=exchanges, queues=queues, outgoing_routings=outgoing_routings
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -185,7 +236,11 @@ def to_yaml(spec: RabbitSchemaSpec) -> str:
                 "durable": q.durable,
                 "exclusive": q.exclusive,
                 "auto_delete": q.auto_delete,
+                "listen": q.listen,
+                "listen_exclusive": q.listen_exclusive,
             }
+            if q.handler:
+                entry["handler"] = q.handler
             if q.dlx:
                 entry["dlx"] = q.dlx
             if q.dlq_routing:
@@ -196,6 +251,18 @@ def to_yaml(spec: RabbitSchemaSpec) -> str:
                     for b in q.bindings
                 ]
             data["queues"].append(entry)
+
+    if spec.outgoing_routings:
+        data["outgoing_routings"] = []
+        for r in spec.outgoing_routings:
+            entry = {
+                "event_type": r.event_type,
+                "exchange": r.exchange,
+                "routing_key": r.routing_key,
+            }
+            if r.require_tag:
+                entry["require_tag"] = r.require_tag
+            data["outgoing_routings"].append(entry)
 
     if not data:
         return ""
@@ -247,6 +314,13 @@ def _merge_queue(existing: QueueSpec, incoming: QueueSpec) -> QueueSpec:
         conflicts.append(
             f"dlq_routing: {existing.dlq_routing!r} vs {incoming.dlq_routing!r}"
         )
+    # handler: conflict only when both specify a non-None value that differs
+    merged_handler = existing.handler
+    if incoming.handler:
+        if existing.handler and existing.handler != incoming.handler:
+            conflicts.append(f"handler: {existing.handler!r} vs {incoming.handler!r}")
+        else:
+            merged_handler = incoming.handler
     if conflicts:
         raise SchemaConflictError(
             f"Queue {existing.name!r} conflict: {', '.join(conflicts)}"
@@ -258,12 +332,16 @@ def _merge_queue(existing: QueueSpec, incoming: QueueSpec) -> QueueSpec:
     ]
     return QueueSpec(
         name=existing.name,
+        # OR semantics for activation flags
         declare=existing.declare or incoming.declare,
+        listen=existing.listen or incoming.listen,
+        listen_exclusive=existing.listen_exclusive or incoming.listen_exclusive,
         durable=existing.durable,
         exclusive=existing.exclusive,
         auto_delete=existing.auto_delete,
         dlx=existing.dlx,
         dlq_routing=existing.dlq_routing,
+        handler=merged_handler,
         bindings=existing.bindings + extra,
     )
 
@@ -306,4 +384,18 @@ def merge(specs: list[RabbitSchemaSpec]) -> RabbitSchemaSpec:
             + "\n".join(f"  - {e}" for e in errors)
         )
 
-    return RabbitSchemaSpec(exchanges=merged_exchanges, queues=merged_queues)
+    # Union outgoing routings by (event_type, exchange, routing_key, require_tag)
+    seen: set[tuple] = set()
+    merged_routings: list[OutgoingRoutingSpec] = []
+    for spec in specs:
+        for r in spec.outgoing_routings:
+            key = (r.event_type, r.exchange, r.routing_key, r.require_tag)
+            if key not in seen:
+                seen.add(key)
+                merged_routings.append(r)
+
+    return RabbitSchemaSpec(
+        exchanges=merged_exchanges,
+        queues=merged_queues,
+        outgoing_routings=merged_routings,
+    )

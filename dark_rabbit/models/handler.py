@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class DarkRabbitHandler(models.Model):
@@ -18,8 +18,24 @@ class DarkRabbitHandler(models.Model):
         ondelete="cascade",
         help="Model that can handle events from dark rabbit",
     )
+    model_name = fields.Char(
+        related="model_id.model",
+        store=True,
+        readonly=True,
+        index=True,
+        string="Model Name",
+    )
     method_name = fields.Char(
         required=True, readonly=True, help="Name of method to call to handle event"
+    )
+    handler_code = fields.Char(
+        compute="_compute_handler_code",
+        store=True,
+        readonly=True,
+        index=True,
+        string="Handler Code",
+        help="Unique identifier in the form model.name:method_name, "
+        "used to reference this handler in schema YAML.",
     )
 
     _sql_constraints = [
@@ -28,7 +44,20 @@ class DarkRabbitHandler(models.Model):
             "UNIQUE(model_id, method_name)",
             "Handler's model and method must be unique",
         ),
+        (
+            "handler_code_uniq",
+            "UNIQUE(handler_code)",
+            "Handler code must be unique",
+        ),
     ]
+
+    @api.depends("model_id.model", "method_name")
+    def _compute_handler_code(self):
+        for rec in self:
+            if rec.model_id and rec.method_name:
+                rec.handler_code = f"{rec.model_id.model}:{rec.method_name}"
+            else:
+                rec.handler_code = False
 
     def _dark_rabbit_handle_event(self, event):
         model = self.sudo().env[self.model_id.model]

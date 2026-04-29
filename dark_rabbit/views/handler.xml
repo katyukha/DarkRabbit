@@ -4,6 +4,7 @@
         <field name="model">dark.rabbit.handler</field>
         <field name="arch" type="xml">
             <list>
+                <field name="handler_code"/>
                 <field name="name"/>
                 <field name="model_id"/>
                 <field name="method_name"/>
@@ -23,6 +24,7 @@
                     </div>
                     <group>
                         <group name="group_handler_info" string="Handler Info">
+                            <field name="handler_code"/>
                             <field name="model_id"/>
                             <field name="method_name"/>
                         </group>
