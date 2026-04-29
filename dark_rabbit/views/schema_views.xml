@@ -21,11 +21,47 @@
                                placeholder="Schema name…"/>
                     </div>
                     <group>
+                        <separator string="Schema definition" colspan="2"/>
                         <field name="spec"
                                nolabel="1"
-                               widget="ace"
-                               options="{'mode': 'yaml'}"
-                               placeholder="exchanges:&#10;  - name: my.events&#10;    type: topic&#10;    durable: true&#10;&#10;queues:&#10;  - name: my.tasks&#10;    durable: true&#10;    bindings:&#10;      - exchange: my.events&#10;        routing_key: &quot;my.tasks.*&quot;"/>
+                               colspan="2"
+                               widget="code"
+                               class="mb-4"/>
+                        <div class="alert alert-info mb-4" colspan="2">
+                            <h4 class="alert-heading">Info and specification</h4>
+                            <div class="pd-4">
+                                Below is description of schema specification:
+                            </div>
+                            <pre class="pd-4 text-info" style="background-color: inherit"><code><![CDATA[
+exchanges:
+- name: <string>        # required
+  declare: <bool>       # default: true
+  type: <string>        # default: topic  (topic|direct|fanout|headers)
+  durable: <bool>       # default: true
+
+queues:
+- name: <string>        # required
+  declare: <bool>       # default: true
+  durable: <bool>       # default: true
+  exclusive: <bool>     # default: false
+  auto_delete: <bool>   # default: false
+  dlx: <string>         # dead-letter exchange name (optional)
+  dlq_routing: <string> # dead-letter routing key (optional)
+  bindings:
+    - exchange: <string>    # required
+      routing_key: <string> # default: ""
+                            ]]></code></pre>
+                            <hr/>
+                            <div class="pd-4">
+                                When merging multiple schemas:
+                                <ul>
+                                    <li>identical entities are merged silently</li>
+                                    <li>conflicting structural fields (type, durable, exclusive …) raise an error before anything is written</li>
+                                    <li><code>declare: true</code> from any schema wins</li>
+                                    <li>bindings are unioned and deduplicated.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </group>
                 </sheet>
             </form>
@@ -33,14 +69,14 @@
     </record>
 
     <record id="action_dark_rabbit_schema_list" model="ir.actions.act_window">
-        <field name="name">Schemas</field>
+        <field name="name">Dark Rabbit Schema</field>
         <field name="res_model">dark.rabbit.schema</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <menuitem action="action_dark_rabbit_schema_list"
               id="menu_dark_rabbit_schema"
-              sequence="15"
+              sequence="100"
               parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>
