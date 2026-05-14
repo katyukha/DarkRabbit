@@ -12,7 +12,7 @@ class DarkRabbitHandlerMixin(models.AbstractModel):
 
         cls = type(self)
 
-        if cls._abstract:
+        if cls._abstract and not getattr(cls, "_dark_rabbit_allow_handlers", False):
             # Do not look for handlers on abstract models
             return res
 
