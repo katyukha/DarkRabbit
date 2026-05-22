@@ -69,6 +69,16 @@ class DarkRabbitEvent(models.Model):
                 pretty = False
             record.body_json_pretty = pretty
 
+    def init(self):
+        super().init()
+        self.env.cr.execute(
+            """
+            CREATE INDEX IF NOT EXISTS dark_rabbit_event__error__idx
+            ON dark_rabbit_event (id)
+            WHERE error = True
+        """
+        )
+
     @api.model
     def handle_message(self, message):
         # Message is DarkRabbitMessage
