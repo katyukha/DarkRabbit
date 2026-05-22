@@ -74,8 +74,8 @@ class DarkRabbitEvent(models.Model):
         self.env.cr.execute(
             """
             CREATE INDEX IF NOT EXISTS dark_rabbit_event__error__idx
-            ON dark_rabbit_event (id)
-            WHERE error = True
+                ON dark_rabbit_event (id)
+                WHERE error = True;
         """
         )
 

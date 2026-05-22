@@ -92,6 +92,10 @@ class DarkRabbitOutgoingEvent(models.Model):
             CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__sender_search__idx
                  ON dark_rabbit_outgoing_event ("created_at", "timestamp", "id")
                  WHERE sent_at IS NULL;
+
+            CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__error__idx
+                ON dark_rabbit_outgoing_event (id)
+                WHERE error = True;
             """
         )
         return super().init()
