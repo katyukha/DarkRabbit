@@ -55,7 +55,7 @@ class DarkRabbitQueue(models.Model):
 
     active = fields.Boolean(default=True, index=True)
 
-    @api.depends("event_ids")
+    @api.depends()
     def _compute_event_count(self):
         mapped_data = read_counts_for_o2m(
             records=self, field_name="event_ids", sudo=True

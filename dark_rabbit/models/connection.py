@@ -79,7 +79,7 @@ class DarkRabbitConnection(models.Model):
         for rec in self:
             rec.exchange_count = mapped_data.get(rec.id, 0)
 
-    @api.depends("event_ids")
+    @api.depends()
     def _compute_event_count(self):
         mapped_data = read_counts_for_o2m(
             records=self, field_name="event_ids", sudo=True
@@ -95,7 +95,7 @@ class DarkRabbitConnection(models.Model):
         for rec in self:
             rec.outgoing_route_count = mapped_data.get(rec.id, 0)
 
-    @api.depends("outgoing_event_ids")
+    @api.depends()
     def _compute_outgoing_event_count(self):
         mapped_data = read_counts_for_o2m(
             records=self, field_name="outgoing_event_ids", sudo=True
