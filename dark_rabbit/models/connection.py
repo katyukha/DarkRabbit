@@ -113,6 +113,7 @@ class DarkRabbitConnection(models.Model):
         )
 
     def _get_declare_config(self):
+        all_bindings = self.mapped("queue_ids.queue_binding_ids")
         return {
             "exchanges": [
                 e._get_exchange_config()
@@ -125,8 +126,9 @@ class DarkRabbitConnection(models.Model):
                     "queue_name": qb.queue_id.queue_name,
                     "exchange_name": qb.exchange_name,
                     "routing_key": qb.routing_key,
+                    "bind": qb.bind,
                 }
-                for qb in self.mapped("queue_ids.queue_binding_ids")
+                for qb in all_bindings
             ],
         }
 

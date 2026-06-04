@@ -182,8 +182,11 @@ class ApplySchemaWizard(models.TransientModel):
                             "queue_id": queue.id,
                             "exchange_id": exchange.id,
                             "routing_key": b_spec.routing_key,
+                            "bind": b_spec.bind,
                         }
                     )
+                elif exists.bind != b_spec.bind:
+                    exists.write({"bind": b_spec.bind})
 
         # --- outgoing routings ---
         self._reconcile_outgoing_routings(connection, spec)

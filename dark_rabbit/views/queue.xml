@@ -59,6 +59,7 @@
                                 <list editable="bottom">
                                     <field name="exchange_id"/>
                                     <field name="routing_key"/>
+                                    <field name="bind"/>
                                 </list>
                             </field>
                         </group>

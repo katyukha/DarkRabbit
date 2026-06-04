@@ -37,6 +37,7 @@ class SchemaConflictError(ValueError):
 class BindingSpec:
     exchange: str
     routing_key: str = ""
+    bind: bool = True
 
 
 @dataclass
@@ -113,6 +114,7 @@ def _parse_queue(raw: dict) -> QueueSpec:
             BindingSpec(
                 exchange=ex_name,
                 routing_key=b.get("routing_key", ""),
+                bind=bool(b.get("bind", True)),
             )
         )
     return QueueSpec(
@@ -246,10 +248,13 @@ def to_yaml(spec: RabbitSchemaSpec) -> str:
             if q.dlq_routing:
                 entry["dlq_routing"] = q.dlq_routing
             if q.bindings:
-                entry["bindings"] = [
-                    {"exchange": b.exchange, "routing_key": b.routing_key}
-                    for b in q.bindings
-                ]
+                b_entries = []
+                for b in q.bindings:
+                    b_entry = {"exchange": b.exchange, "routing_key": b.routing_key}
+                    if not b.bind:
+                        b_entry["bind"] = False
+                    b_entries.append(b_entry)
+                entry["bindings"] = b_entries
             data["queues"].append(entry)
 
     if spec.outgoing_routings:
