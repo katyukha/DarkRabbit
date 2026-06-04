@@ -43,6 +43,7 @@
                                 <list editable="bottom">
                                     <field name="queue_id"/>
                                     <field name="routing_key"/>
+                                    <field name="bind"/>
                                 </list>
                             </field>
                         </group>

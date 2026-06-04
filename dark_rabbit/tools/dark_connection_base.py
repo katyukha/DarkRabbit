@@ -77,7 +77,7 @@ class DarkRabbitConnectionBase:
         #       and call only once (at least for publisher)
         self._declare_exchanges()
         self._declare_queues()
-        self._bind_queues()
+        self._apply_queue_bindings()
 
         self._suspended = False
 
@@ -107,14 +107,21 @@ class DarkRabbitConnectionBase:
                     arguments=arguments if arguments else None,
                 )
 
-    def _bind_queues(self):
+    def _apply_queue_bindings(self):
         if queue_bindings := self._config.get("declare", {}).get("queue_bindings"):
             for qb in queue_bindings:
-                self.channel.queue_bind(
-                    queue=qb["queue_name"],
-                    exchange=qb["exchange_name"],
-                    routing_key=qb["routing_key"],
-                )
+                if qb.get("bind", True):
+                    self.channel.queue_bind(
+                        queue=qb["queue_name"],
+                        exchange=qb["exchange_name"],
+                        routing_key=qb["routing_key"],
+                    )
+                else:
+                    self.channel.queue_unbind(
+                        queue=qb["queue_name"],
+                        exchange=qb["exchange_name"],
+                        routing_key=qb["routing_key"],
+                    )
 
     def __enter__(self):
         return self
