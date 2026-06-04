@@ -11,9 +11,9 @@ jobs:
     strategy:
       fail-fast: true
     container:
-      image: ghcr.io/katyukha/odood/odoo/18.0:0.4.4
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Link addons
         run: odood --config-from-env addons link .
@@ -45,12 +45,12 @@ jobs:
     strategy:
       fail-fast: true
     container:
-      image: ghcr.io/katyukha/odood/odoo/18.0:0.4.4
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.2
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
-        image: postgres:12
+        image: postgres:15
         env:
           POSTGRES_PASSWORD: odoo
           POSTGRES_USER: odoo
@@ -67,7 +67,7 @@ jobs:
       ODOOD_OPT_DB_PASSWORD: odoo
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Link addons
         run: odood --config-from-env addons link .
@@ -90,12 +90,12 @@ jobs:
     strategy:
       fail-fast: true
     container:
-      image: ghcr.io/katyukha/odood/odoo/18.0:0.4.4
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.2
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
-        image: postgres:12
+        image: postgres:15
         env:
           POSTGRES_PASSWORD: odoo
           POSTGRES_USER: odoo
@@ -112,7 +112,7 @@ jobs:
       ODOOD_OPT_DB_PASSWORD: odoo
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Link addons
         run: odood --config-from-env addons link .
