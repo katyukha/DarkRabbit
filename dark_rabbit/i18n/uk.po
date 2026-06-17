@@ -1,0 +1,777 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* dark_rabbit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-22 20:40+0000\n"
+"PO-Revision-Date: 2026-02-22 20:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__active
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__active
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__active
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__active
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_exchange_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_routing_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_search
+msgid "Active"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_exchange_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_exchange_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_routing_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_routing_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_search
+msgid "Archived"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_queue__queue_declare_auto_delete
+msgid "Automatically delete queue after consumer cancels or disconnects"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_base
+msgid "Base"
+msgstr "База"
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__queue_binding_ids
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_binding_ids
+msgid "Bind queue to exchanges via specified routing keys"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_exchange_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_form
+msgid "Bindings"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__body
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__body
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_form
+msgid "Body"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__body_json_pretty
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__body_json_pretty
+msgid "Body Json Pretty"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__code
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__code
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__require_tag_code
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__code
+msgid "Code"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__connection_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__connection_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__connection_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__connection_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__connection_id
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Connection"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Connection code..."
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Connection name..."
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__content_type
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__content_type
+msgid "Content Type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_event__content_type
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_outgoing_event__content_type
+msgid "Content type of incoming message"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__correlation_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__correlation_id
+msgid "Correlation ID"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_outgoing_event__correlation_id
+msgid "Correlation ID for message properties."
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_event__correlation_id
+msgid "Correlation ID from message properties."
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__create_date
+msgid "Create Date"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__create_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__create_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__created_at
+msgid "Creation date"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_dlq_id
+msgid "DLQ"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_dlq
+msgid "DLQ Name"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_dlq_routing
+msgid "DLQ Routing"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_dlx_id
+msgid "DLX"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_dlx
+msgid "DLX Name"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_outgoing_event_type
+msgid "Darg Rabbit Outgoing Event Type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_root
+msgid "Dark Rabbit"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_connection_list
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_connection
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_connection
+msgid "Dark Rabbit Connection"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_event_list
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_event
+msgid "Dark Rabbit Event"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.server,name:dark_rabbit.action_server_retry_handler
+msgid "Dark Rabbit Event: Retry Handler"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_exchange_list
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_exchange
+msgid "Dark Rabbit Exchange"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_handler_list
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_handler
+msgid "Dark Rabbit Handler"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_outgoing_event_list
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_outgoing_event
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_outgoing_event
+msgid "Dark Rabbit Outgoing Event"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_outgoing_routing_list
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_outgoing_routing
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_outgoing_routing
+msgid "Dark Rabbit Outgoing Routing"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_outgoing_routing_tag_list
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_outgoing_routing_tag
+msgid "Dark Rabbit Outgoing Routing Tag"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_outgoing_event_type_list
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_outgoing_event_type
+msgid "Dark Rabbit Outgoing Routing Type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.actions.act_window,name:dark_rabbit.action_dark_rabbit_queue_list
+#: model:ir.ui.menu,name:dark_rabbit.menu_dark_rabbit_queue
+msgid "Dark Rabbit Queue"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_event
+msgid "Dark Rabbit: Event"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_exchange
+msgid "Dark Rabbit: Exchange"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_handler
+msgid "Dark Rabbit: Handler"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_handler_mixin
+msgid "Dark Rabbit: Handler Mixin"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_outgoing_routing_tag
+msgid "Dark Rabbit: Outgoing Routing Tag"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_queue
+msgid "Dark Rabbit: Queue"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model,name:dark_rabbit.model_dark_rabbit_queue_binding
+msgid "Dark Rabbit: Queue Binding"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Date"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_exchange_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_form
+msgid "Declare"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__exchange_declare
+msgid "Declare Exchange"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare
+msgid "Declare queue"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields.selection,name:dark_rabbit.selection__dark_rabbit_exchange__exchange_type__direct
+msgid "Direct"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__display_name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_queue__listen_exclusive
+msgid "Do not allow other consumers on the queue"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__error
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__error
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Error"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__error_msg
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__error_msg
+msgid "Error Msg"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_form
+msgid "Error info"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__event_ids
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__event_ids
+msgid "Event"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__event_count
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__event_count
+msgid "Event Count"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_form
+msgid "Events"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__exchange_ids
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__exchange
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__exchange
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__exchange_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__exchange_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__exchange_name
+msgid "Exchange"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__exchange_count
+msgid "Exchange Count"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__exchange_durable
+msgid "Exchange Durable"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__exchange_type
+msgid "Exchange Type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Exchanges"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields.selection,name:dark_rabbit.selection__dark_rabbit_exchange__exchange_type__fanout
+msgid "Fanout"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Group By"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__handler_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__handler_id
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_form
+msgid "Handler"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_handler_form
+msgid "Handler Info"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_handler_form
+msgid "Handler name..."
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.constraint,message:dark_rabbit.constraint_dark_rabbit_handler_model_method_uniq
+msgid "Handler's model and method must be unique"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields.selection,name:dark_rabbit.selection__dark_rabbit_exchange__exchange_type__headers
+msgid "Headers"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__host
+msgid "Host"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__id
+msgid "ID"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_queue__listen
+msgid "If set, then this queue will be listened for new messages"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__write_uid
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__write_date
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__listen
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_queue_form
+msgid "Listen"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__listen_exclusive
+msgid "Listen Exclusive"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__message_id
+msgid "Message ID"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_event__message_id
+msgid "Message ID from message properties"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__message_id
+msgid "Message Id"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__message_type
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__message_type
+msgid "Message Type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__method_name
+msgid "Method Name"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__model_id
+msgid "Model"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_handler__model_id
+msgid "Model that can handle events from dark rabbit"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_exchange__name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_handler__name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__name
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing_tag__name
+msgid "Name"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_handler__method_name
+msgid "Name of method to call to handle event"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "No error"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Not sent"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__outgoing_event_ids
+msgid "Outgoing Event"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__outgoing_event_count
+msgid "Outgoing Event Count"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__outgoing_event_type_id
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Outgoing Event Type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Outgoing Events"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__outgoing_route_ids
+msgid "Outgoing Route"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__outgoing_route_count
+msgid "Outgoing Route Count"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__outgoing_event_type_id
+msgid "Outgoing event type"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Outgoing routes"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__outgoing_routing_ids
+msgid "Outgoing routing"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__password
+msgid "Password"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__port
+msgid "Port"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__queue_ids
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__queue_id
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__queue_id
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+msgid "Queue"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__queue_count
+msgid "Queue Count"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_name
+msgid "Queue Name"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_auto_delete
+msgid "Queue auto-delete"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_durable
+msgid "Queue durable"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue__queue_declare_exclusive
+msgid "Queue exclusive"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Queues"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__require_tag_id
+msgid "Require Tag"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_form
+msgid "Retry handle"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__routing_key
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__routing_key
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_routing__routing_key
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_queue_binding__routing_key
+msgid "Routing Key"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_outgoing_event_search
+msgid "Sent"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__sent_at
+msgid "Sent At"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event_type__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Settings"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_connection_form
+msgid "Test Connection"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.constraint,message:dark_rabbit.constraint_dark_rabbit_outgoing_routing_conn_type_exch_route_unique
+msgid "The outgoing routing must be unique!"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__throttling_threshold
+msgid "Throttling threshold (msg/sec)"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_event__timestamp
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_outgoing_event__timestamp
+msgid "Timestamp"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_outgoing_event__timestamp
+msgid "Timestamp for message properties"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_event__timestamp
+msgid "Timestamp from message properties"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields.selection,name:dark_rabbit.selection__dark_rabbit_exchange__exchange_type__topic
+msgid "Topic"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_outgoing_event__message_type
+msgid "Type field for message properties"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,help:dark_rabbit.field_dark_rabbit_event__message_type
+msgid "Type field from message properties"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__user
+msgid "User"
+msgstr ""
+
+#. module: dark_rabbit
+#: model:ir.model.fields,field_description:dark_rabbit.field_dark_rabbit_connection__virtual_host
+msgid "Virtual Host"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+msgid "With handler"
+msgstr ""
+
+#. module: dark_rabbit
+#: model_terms:ir.ui.view,arch_db:dark_rabbit.view_dark_rabbit_event_search
+msgid "Without handler"
+msgstr ""

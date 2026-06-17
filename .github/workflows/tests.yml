@@ -11,7 +11,9 @@ jobs:
     strategy:
       fail-fast: true
     container:
-      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.2
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.3
+      # Disable image healthcheck: it polls /web/health on 8069 and stalls HttpCase test teardown.
+      options: --no-healthcheck
     steps:
       - uses: actions/checkout@v6
 
@@ -45,7 +47,9 @@ jobs:
     strategy:
       fail-fast: true
     container:
-      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.2
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.3
+      # Disable image healthcheck: it polls /web/health on 8069 and stalls HttpCase test teardown.
+      options: --no-healthcheck
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
@@ -90,7 +94,9 @@ jobs:
     strategy:
       fail-fast: true
     container:
-      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.2
+      image: ghcr.io/katyukha/odood/odoo/18.0:0.6.3
+      # Disable image healthcheck: it polls /web/health on 8069 and stalls HttpCase test teardown.
+      options: --no-healthcheck
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container

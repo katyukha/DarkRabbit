@@ -99,6 +99,31 @@ class DarkConnectionPool:
                     exc_info=True,
                 )
                 connection.schedule_reload()
+            except pika.exceptions.ConsumerCancelled:
+                # The broker cancelled the consumer (queue deleted, cluster
+                # node failover, ...). The TCP connection may still look alive
+                # on our side, but no messages will be delivered anymore, so we
+                # have to reload the connection to re-subscribe to the queues.
+                _logger.error(
+                    "Consumer cancelled by broker on connection %s —"
+                    " scheduling reload to re-subscribe",
+                    connection.connection_id,
+                    exc_info=True,
+                )
+                connection.schedule_reload()
+            except pika.exceptions.AMQPError:
+                # Any other AMQP-level error means the connection/channel is no
+                # longer usable. Most notably, a half-open TCP socket usually
+                # surfaces here as StreamLostError / ConnectionClosed rather
+                # than as a heartbeat timeout, so without this branch such a
+                # dead connection would propagate and stay a "ghost". Schedule
+                # a reload to rebuild it.
+                _logger.error(
+                    "AMQP error on connection %s — scheduling reload",
+                    connection.connection_id,
+                    exc_info=True,
+                )
+                connection.schedule_reload()
             except ValueError as e:
                 _logger.error(
                     "Error while processing events (conn_id=%s)",

@@ -1,0 +1,111 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* test_dark_rabbit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__body
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__body
+msgid "Body"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__create_uid
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__create_date
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.ui.menu,name:test_dark_rabbit.menu_dark_rabbit_tests
+msgid "Dark Rabbit Tests"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.ui.menu,name:test_dark_rabbit.menu_dark_rabbit_tests_handler
+msgid "Dark Rabbit: Test Handler"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.ui.menu,name:test_dark_rabbit.menu_dark_rabbit_tests_ougoing_event
+msgid "Dark Rabbit: Test Outgoing Events"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__display_name
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__id
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__id
+msgid "ID"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__write_uid
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_handler__write_date
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model.fields,field_description:test_dark_rabbit.field_test_dark_rabbit_outgoing_event__tag_id
+msgid "Tag"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.actions.act_window,name:test_dark_rabbit.action_dark_rabbit_handler_list
+msgid "Test Dark Rabbit Hander"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.actions.act_window,name:test_dark_rabbit.action_dark_rabbit_outgoing_event_list
+msgid "Test Dark Rabbit Outgoing Event"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:dark.rabbit.outgoing.event.type,name:test_dark_rabbit.outgoing_event_type_created
+msgid "Test Record Created"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:dark.rabbit.outgoing.event.type,name:test_dark_rabbit.outgoing_event_type_deleted
+msgid "Test Record Deleted"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:dark.rabbit.outgoing.event.type,name:test_dark_rabbit.outgoing_event_type_updated
+msgid "Test Record Updated"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model,name:test_dark_rabbit.model_test_dark_rabbit_handler
+msgid "test.dark.rabbit.handler"
+msgstr ""
+
+#. module: test_dark_rabbit
+#: model:ir.model,name:test_dark_rabbit.model_test_dark_rabbit_outgoing_event
+msgid "test.dark.rabbit.outgoing.event"
+msgstr ""
