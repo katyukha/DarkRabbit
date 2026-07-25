@@ -19,9 +19,10 @@ class DarkRabbitSchema(models.Model):
         help="YAML definition of the AMQP entities required by this schema.",
     )
 
-    _sql_constraints = [
-        ("name_uniq", "UNIQUE(name)", "Schema name must be unique."),
-    ]
+    _name_uniq = models.Constraint(
+        "UNIQUE(name)",
+        "Schema name must be unique.",
+    )
 
     def action_open_fill_schema_wizard(self):
         self.ensure_one()

@@ -41,10 +41,7 @@ class DarkRabbitOutgoingRouting(models.Model):
 
     active = fields.Boolean(default=True, index=True)
 
-    _sql_constraints = [
-        (
-            "conn_type_exch_route_unique",
-            "UNIQUE(outgoing_event_type_id, connection_id, exchange_id, routing_key)",
-            "The outgoing routing must be unique!",
-        ),
-    ]
+    _conn_type_exch_route_unique = models.Constraint(
+        "UNIQUE(outgoing_event_type_id, connection_id, exchange_id, routing_key)",
+        "The outgoing routing must be unique!",
+    )

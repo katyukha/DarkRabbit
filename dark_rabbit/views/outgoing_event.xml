@@ -25,7 +25,7 @@
                 <header>
                 </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box" />
+                    <div class="oe_button_box" name="button_box"/>
                     <group>
                         <group>
                             <field name="outgoing_event_type_id"/>
@@ -60,7 +60,7 @@
         <field name="model">dark.rabbit.outgoing.event</field>
         <field name="arch" type="xml">
             <search>
-                <field name="connection_id" />
+                <field name="connection_id"/>
                 <field name="outgoing_event_type_id"/>
                 <field name="exchange"/>
                 <field name="routing_key"/>
@@ -70,44 +70,20 @@
                 <field name="created_at"/>
                 <field name="sent_at"/>
 
-                <filter name="filter_with_error"
-                        string="Error"
-                        domain="[('error', '=', True)]"/>
-                <filter name="filter_without_error"
-                        string="No error"
-                        domain="[('error', '=', False)]"/>
+                <filter name="filter_with_error" string="Error" domain="[('error', '=', True)]"/>
+                <filter name="filter_without_error" string="No error" domain="[('error', '=', False)]"/>
                 <separator/>
 
-                <filter name="filter_sent"
-                        string="Sent"
-                        domain="[('sent_at', '!=', False)]"/>
-                <filter name="filter_not_sent"
-                        string="Not sent"
-                        domain="[('sent_at', '=', False)]"/>
+                <filter name="filter_sent" string="Sent" domain="[('sent_at', '!=', False)]"/>
+                <filter name="filter_not_sent" string="Not sent" domain="[('sent_at', '=', False)]"/>
                 <separator/>
 
 
-                <group expand="1" string="Group By">
-                    <filter
-                        string="Date"
-                        name="group_by_created_at"
-                        context="{'group_by':'created_at'}"
-                    />
-                    <filter
-                        string="Connection"
-                        name="group_by_connection_id"
-                        context="{'group_by':'connection_id'}"
-                    />
-                    <filter
-                        string="Outgoing Event Type"
-                        name="group_by_outgoing_event_type_id"
-                        context="{'group_by':'outgoing_event_type_id'}"
-                    />
-                    <filter
-                        string="Error"
-                        name="group_by_error"
-                        context="{'group_by':'error'}"
-                    />
+                <group>
+                    <filter string="Date" name="group_by_created_at" context="{'group_by':'created_at'}"/>
+                    <filter string="Connection" name="group_by_connection_id" context="{'group_by':'connection_id'}"/>
+                    <filter string="Outgoing Event Type" name="group_by_outgoing_event_type_id" context="{'group_by':'outgoing_event_type_id'}"/>
+                    <filter string="Error" name="group_by_error" context="{'group_by':'error'}"/>
                 </group>
 
                 <searchpanel view_types="list,pivot,graph">
@@ -123,9 +99,6 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem action="action_dark_rabbit_outgoing_event_list"
-              id="menu_dark_rabbit_outgoing_event"
-              sequence="70"
-              parent="dark_rabbit.menu_dark_rabbit_root"/>
+    <menuitem action="action_dark_rabbit_outgoing_event_list" id="menu_dark_rabbit_outgoing_event" sequence="70" parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>

@@ -26,10 +26,7 @@ class DarkRabbitQueue(models.Model):
     routing_key = fields.Char()
     bind = fields.Boolean(default=True)
 
-    _sql_constraints = [
-        (
-            "unique_queue_exchange_routing_key",
-            "UNIQUE NULLS NOT DISTINCT (queue_id, exchange_id, routing_key)",
-            "A binding for this queue, exchange, and routing key already exists.",
-        )
-    ]
+    _unique_queue_exchange_routing_key = models.Constraint(
+        "UNIQUE NULLS NOT DISTINCT (queue_id, exchange_id, routing_key)",
+        "A binding for this queue, exchange, and routing key already exists.",
+    )

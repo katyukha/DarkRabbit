@@ -38,18 +38,14 @@ class DarkRabbitHandler(models.Model):
         "used to reference this handler in schema YAML.",
     )
 
-    _sql_constraints = [
-        (
-            "model_method_uniq",
-            "UNIQUE(model_id, method_name)",
-            "Handler's model and method must be unique",
-        ),
-        (
-            "handler_code_uniq",
-            "UNIQUE(handler_code)",
-            "Handler code must be unique",
-        ),
-    ]
+    _model_method_uniq = models.Constraint(
+        "UNIQUE(model_id, method_name)",
+        "Handler's model and method must be unique",
+    )
+    _handler_code_uniq = models.Constraint(
+        "UNIQUE(handler_code)",
+        "Handler code must be unique",
+    )
 
     @api.depends("model_id.model", "method_name")
     def _compute_handler_code(self):

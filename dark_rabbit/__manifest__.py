@@ -1,6 +1,6 @@
 {
     "name": "Dark Rabbit",
-    "version": "18.0.0.6.1",
+    "version": "19.0.0.6.1",
     "license": "LGPL-3",
     "summary": "Rabbit from Dark Side. Brings some dark magic to your messaging.",
     "category": "Technical Settings",
@@ -10,7 +10,7 @@
         "base_field_big_int",
     ],
     "demo": [],
-    "external_dependencies": {"python": ["yaml"]},
+    "external_dependencies": {"python": ["pyyaml"]},
     "data": [
         "security/ir.model.access.csv",
         "views/menu.xml",

@@ -23,15 +23,10 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_retry_handle"
-                            type="object"
-                            string="Retry handle"
-                            class="oe_highlight"
-                            icon="fa-refresh"
-                            invisible="not error"/>
+                    <button name="action_retry_handle" type="object" string="Retry handle" class="oe_highlight" icon="fa-refresh" invisible="not error"/>
                 </header>
                 <sheet>
-                    <div class="oe_button_box" name="button_box" />
+                    <div class="oe_button_box" name="button_box"/>
                     <group>
                         <group>
                             <field name="connection_id"/>
@@ -73,47 +68,19 @@
                 <field name="queue_id"/>
                 <field name="handler_id"/>
 
-                <filter name="filter_with_error"
-                        string="Error"
-                        domain="[('error', '=', True)]"/>
-                <filter name="filter_without_error"
-                        string="No error"
-                        domain="[('error', '=', False)]"/>
+                <filter name="filter_with_error" string="Error" domain="[('error', '=', True)]"/>
+                <filter name="filter_without_error" string="No error" domain="[('error', '=', False)]"/>
                 <separator/>
-                <filter name="filter_with_handler"
-                        string="With handler"
-                        domain="[('handler_id', '!=', False)]"/>
-                <filter name="filter_without_handler"
-                        string="Without handler"
-                        domain="[('handler_id', '=', False)]"/>
+                <filter name="filter_with_handler" string="With handler" domain="[('handler_id', '!=', False)]"/>
+                <filter name="filter_without_handler" string="Without handler" domain="[('handler_id', '=', False)]"/>
                 <separator/>
 
-                <group expand="1" string="Group By">
-                    <filter
-                        string="Date"
-                        name="group_by_create_date"
-                        context="{'group_by':'create_date'}"
-                    />
-                    <filter
-                        string="Connection"
-                        name="group_by_connection_id"
-                        context="{'group_by':'connection_id'}"
-                    />
-                    <filter
-                        string="Queue"
-                        name="group_by_queue_id"
-                        context="{'group_by':'queue_id'}"
-                    />
-                    <filter
-                        string="Handler"
-                        name="group_by_handler_id"
-                        context="{'group_by':'handler_id'}"
-                    />
-                    <filter
-                        string="Error"
-                        name="group_by_error"
-                        context="{'group_by':'error'}"
-                    />
+                <group>
+                    <filter string="Date" name="group_by_create_date" context="{'group_by':'create_date'}"/>
+                    <filter string="Connection" name="group_by_connection_id" context="{'group_by':'connection_id'}"/>
+                    <filter string="Queue" name="group_by_queue_id" context="{'group_by':'queue_id'}"/>
+                    <filter string="Handler" name="group_by_handler_id" context="{'group_by':'handler_id'}"/>
+                    <filter string="Error" name="group_by_error" context="{'group_by':'error'}"/>
                 </group>
 
                 <searchpanel view_types="list,pivot,graph">
@@ -130,9 +97,6 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem action="action_dark_rabbit_event_list"
-              id="menu_dark_rabbit_event"
-              sequence="50"
-              parent="dark_rabbit.menu_dark_rabbit_root"/>
+    <menuitem action="action_dark_rabbit_event_list" id="menu_dark_rabbit_event" sequence="50" parent="dark_rabbit.menu_dark_rabbit_root"/>
 
 </odoo>
