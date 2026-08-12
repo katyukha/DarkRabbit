@@ -91,7 +91,7 @@ class DarkRabbitOutgoingEvent(models.Model):
             -- Index used by event sender to search for new events to be sent.
             --
             -- connection_id leads because the sender queries one connection at
-            -- a time (see services/sender_worker.get_events_to_publish): an
+            -- a time (see services/sender_worker.get_connection_events): an
             -- equality on the leading column plus the exact ORDER BY in the
             -- remaining ones lets the index answer the filter AND the sort, so
             -- the scan stops at the batch limit.

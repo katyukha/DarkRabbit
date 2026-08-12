@@ -31,39 +31,6 @@ PublishResult = collections.namedtuple(
 )
 
 
-def get_events_to_publish(env, connection_ids, limit=BATCH_PUBLISH):
-    """Unsent events for ``connection_ids``, oldest first, ``limit`` per connection.
-
-    One query per connection rather than a single ``connection_id IN (...)``.
-    Two reasons:
-
-    - It matches ``dark_rabbit_outgoing_event__sender_search_v2__idx``, which
-      leads with ``connection_id`` and continues with exactly this ordering. An
-      equality on the leading column lets the index supply both the filter and
-      the order, so the scan stops as soon as the limit is met. With an ``IN``
-      list the index can no longer produce the global ordering and PostgreSQL
-      has to sort every matching row before applying the limit.
-    - It is fair. A single query took the oldest ``limit`` events overall, so
-      one connection with a backlog could fill the whole batch and starve the
-      others indefinitely.
-
-    ``limit`` applies per connection, so a cycle may carry up to
-    ``limit * len(connection_ids)`` events. That does not change how much is
-    sent overall -- ``run_service`` keeps cycling until nothing is left -- only
-    how much goes into one transaction, and how long it is between the
-    ``process_data_events`` calls that keep the AMQP connections alive.
-    """
-    Event = env["dark.rabbit.outgoing.event"]
-    events = Event.browse()
-    for connection_id in connection_ids:
-        events |= Event.search(
-            [("sent_at", "=", False), ("connection_id", "=", connection_id)],
-            order="created_at ASC, timestamp ASC, id ASC",
-            limit=limit,
-        )
-    return events
-
-
 class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
     """This class represents service worker for single database.
 
@@ -170,44 +137,80 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
         )
         return True
 
+    def _publisher_ready(self, publisher):
+        """Whether ``publisher`` can accept events right now.
+
+        Checked *before* querying: a publisher that cannot send should not cost
+        a database round trip at all.
+        """
+        if not publisher:
+            # No publisher spawned for this connection yet; one may appear on a
+            # later cycle.
+            return False
+
+        if not publisher.can_send:
+            return False
+
+        if publisher.scheduled_reload:
+            return False
+
+        if publisher.channel.is_closed:
+            publisher.schedule_reload()
+            return False
+
+        return True
+
     def _publish_events(self, env):
-        events = get_events_to_publish(
-            env, self._publisher_registry.active_connection_ids
-        )
-        events_total = len(events)
+        """Publish a batch per ready connection.
+
+        Readiness is decided first and events are fetched per connection, so a
+        stalled publisher costs nothing -- previously its events were selected
+        and then discarded, one query and one batch slot per cycle, every
+        cycle.
+
+        Note this makes ``PublishResult.total`` count events actually
+        attempted rather than merely selected. ``run_service`` reads it as "is
+        there anything to do", so when no publisher is usable it now correctly
+        sees zero and sleeps, instead of spinning on events it could never
+        send.
+        """
+        events_total = 0
         events_sent = 0
         events_failed = 0
         events_skipped = 0
-        for event in events:
-            publisher = self._publisher_registry.get(event.connection_id.id)
-            if not publisher:
-                # There is not active publisher for this event. Thus we have to
-                # skip it. May be publisher for this evetn will be spawned later.
-                events_skipped += 1
+
+        for connection_id in self._publisher_registry.active_connection_ids:
+            publisher = self._publisher_registry.get(connection_id)
+            if not self._publisher_ready(publisher):
                 continue
 
-            if not publisher.can_send:
-                events_skipped += 1
-                continue
+            # One connection at a time, never `connection_id IN (...)`: this
+            # shape matches dark_rabbit_outgoing_event__sender_search_v2__idx,
+            # which leads with connection_id and continues with exactly this
+            # ordering, so the index answers the filter AND the sort and the
+            # scan stops at the limit. An IN list cannot produce the global
+            # ordering, so PostgreSQL would sort every matching row first.
+            events = env["dark.rabbit.outgoing.event"].search(
+                [("sent_at", "=", False), ("connection_id", "=", connection_id)],
+                order="created_at ASC, timestamp ASC, id ASC",
+                limit=BATCH_PUBLISH,
+            )
+            events_total += len(events)
 
-            if publisher.scheduled_reload:
-                # Publisher is scheduled for reload, thus do not send events to
-                # that publisher anymore
-                events_skipped += 1
-                continue
+            for index, event in enumerate(events):
+                if publisher.channel.is_closed:
+                    # Channel died part way through the batch. Stop and let the
+                    # next cycle retry the remainder against a fresh publisher,
+                    # rather than failing every event that is left.
+                    publisher.schedule_reload()
+                    events_skipped += len(events) - index
+                    break
 
-            if publisher.channel.is_closed:
-                # If channel connection is closed, then schedule reload of
-                # publisher and skip event
-                publisher.schedule_reload()
-                events_skipped += 1
-                continue
-
-            # Do actual publish of event
-            if self._publish_event(publisher, event):
-                events_sent += 1
-            else:
-                events_failed += 1
+                # Do actual publish of event
+                if self._publish_event(publisher, event):
+                    events_sent += 1
+                else:
+                    events_failed += 1
 
         return PublishResult(events_total, events_sent, events_skipped, events_failed)
 
