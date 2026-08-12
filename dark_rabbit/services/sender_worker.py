@@ -140,12 +140,11 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
     def _publisher_ready(self, publisher):
         """Whether ``publisher`` can accept events right now.
 
-        Checked *before* querying: a publisher that cannot send should not cost
-        a database round trip at all.
+        Checked before querying: an unusable publisher must not cost a
+        database round trip.
         """
         if not publisher:
-            # No publisher spawned for this connection yet; one may appear on a
-            # later cycle.
+            # Not spawned for this connection yet; may appear on a later cycle
             return False
 
         if not publisher.can_send:
@@ -163,16 +162,9 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
     def _publish_events(self, env):
         """Publish a batch per ready connection.
 
-        Readiness is decided first and events are fetched per connection, so a
-        stalled publisher costs nothing -- previously its events were selected
-        and then discarded, one query and one batch slot per cycle, every
-        cycle.
-
-        Note this makes ``PublishResult.total`` count events actually
-        attempted rather than merely selected. ``run_service`` reads it as "is
-        there anything to do", so when no publisher is usable it now correctly
-        sees zero and sleeps, instead of spinning on events it could never
-        send.
+        ``PublishResult.total`` counts events attempted, not merely selected,
+        so ``run_service`` reads zero when no publisher is usable and sleeps
+        rather than spinning.
         """
         events_total = 0
         events_sent = 0
@@ -184,12 +176,10 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
             if not self._publisher_ready(publisher):
                 continue
 
-            # One connection at a time, never `connection_id IN (...)`: this
-            # shape matches dark_rabbit_outgoing_event__sender_search_v2__idx,
-            # which leads with connection_id and continues with exactly this
-            # ordering, so the index answers the filter AND the sort and the
-            # scan stops at the limit. An IN list cannot produce the global
-            # ordering, so PostgreSQL would sort every matching row first.
+            # One connection at a time, never `connection_id IN (...)`: an
+            # IN list cannot yield the global ordering, so PostgreSQL would
+            # sort every matching row instead of stopping at the limit.
+            # Column order here must match sender_search_v2__idx.
             events = env["dark.rabbit.outgoing.event"].search(
                 [("sent_at", "=", False), ("connection_id", "=", connection_id)],
                 order="created_at ASC, timestamp ASC, id ASC",
@@ -199,9 +189,9 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
 
             for index, event in enumerate(events):
                 if publisher.channel.is_closed:
-                    # Channel died part way through the batch. Stop and let the
-                    # next cycle retry the remainder against a fresh publisher,
-                    # rather than failing every event that is left.
+                    # Channel died mid-batch: stop, so the next cycle retries
+                    # the remainder against a fresh publisher instead of
+                    # failing every event that is left.
                     publisher.schedule_reload()
                     events_skipped += len(events) - index
                     break

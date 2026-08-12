@@ -9,12 +9,9 @@ NEW_INDEX = "dark_rabbit_outgoing_event__sender_search_v2__idx"
 def migrate(cr, version):
     """Drop the old sender index, superseded by the connection_id-leading one.
 
-    post-migrate, not pre-migrate: the replacement is created by the model's
-    init(), which runs between the two. Dropping in pre-migrate would leave the
-    sender with no usable index for the whole upgrade.
-
-    Conditional for the same reason -- if init() did not get as far as creating
-    the replacement, keeping the old index is far better than having neither.
+    post-migrate, and conditional: the replacement is created by the model's
+    init(), which runs between pre- and post-migrate. Dropping unconditionally
+    or earlier could leave the sender with no usable index.
     """
     cr.execute("SELECT 1 FROM pg_indexes WHERE indexname = %s", (NEW_INDEX,))
     if not cr.fetchone():

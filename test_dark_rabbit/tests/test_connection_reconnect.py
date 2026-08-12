@@ -22,11 +22,10 @@ class FakeChannel:
 
 
 class FakeConnection(DarkRabbitConnectionBase):
-    """A connection with the broker removed and nothing else.
+    """Real connection with the broker stubbed out.
 
-    Subclassing the real class on purpose: ``config``, ``schedule_reload`` and
-    ``scheduled_reload`` are exactly the parts under test, so they must be the
-    real implementations.
+    Subclasses the real class on purpose: ``config`` / ``schedule_reload`` are
+    the parts under test.
     """
 
     def __init__(self, config):
@@ -51,10 +50,9 @@ class FakeConnection(DarkRabbitConnectionBase):
 class TestConnectionReconnect(TransactionCase):
     """Detecting a broken connection and rebuilding it.
 
-    This is the whole recovery path for both the sender and the consumer, and
-    it works indirectly: ``schedule_reload`` does not reconnect anything, it
-    adds a key to the connection's own config so that the next
-    ``update_config`` comparison finds it different and rebuilds it.
+    The recovery path for both workers, and an indirect one:
+    ``schedule_reload`` does not reconnect, it dirties the connection's config
+    so the next ``update_config`` comparison rebuilds it.
     """
 
     def setUp(self):
@@ -70,11 +68,9 @@ class TestConnectionReconnect(TransactionCase):
     def _db_config(self):
         """Config as the workers read it: a fresh dict on every call.
 
-        Freshness matters. ``schedule_reload`` mutates the connection's own
-        config dict, and ``update_config`` compares that against this one -- if
-        a caller handed back the *same* dict object, the mutation would land on
-        both sides, the comparison would still be equal, and nothing would ever
-        be rebuilt.
+        Handing back the same dict object would let ``schedule_reload``'s
+        mutation land on both sides of the comparison, and nothing would
+        rebuild.
         """
         return {
             CONN_ID: {
@@ -107,8 +103,8 @@ class TestConnectionReconnect(TransactionCase):
 
     @mute_logger(POOL_LOGGER)
     def test_consumer_cancelled_schedules_reload(self):
-        """The consumer-specific one: the socket still looks alive, but the
-        broker has stopped delivering, so only re-subscribing recovers it."""
+        """Socket still looks alive, but delivery has stopped; only
+        re-subscribing recovers it."""
         connection = self._start()
         connection.raise_on_process = pika.exceptions.ConsumerCancelled()
 
@@ -118,8 +114,7 @@ class TestConnectionReconnect(TransactionCase):
 
     @mute_logger(POOL_LOGGER)
     def test_stream_lost_schedules_reload(self):
-        """Half-open sockets surface as an AMQPError rather than a heartbeat
-        timeout, which is why the broad branch exists."""
+        """Half-open sockets surface as AMQPError, not a heartbeat timeout."""
         connection = self._start()
         connection.raise_on_process = pika.exceptions.StreamLostError()
 
@@ -138,12 +133,8 @@ class TestConnectionReconnect(TransactionCase):
     # ------------------------------------------------------------- reconnect
 
     def test_scheduled_reload_rebuilds_on_unchanged_config(self):
-        """The coupling that makes recovery work.
-
-        Nothing reads ``scheduled_reload`` to reconnect. The rebuild happens
-        because the flag changed the connection's config, so the next
-        comparison against the database config no longer matches.
-        """
+        """Nothing reads ``scheduled_reload`` to reconnect: the rebuild
+        happens because the flag changed the config."""
         connection = self._start()
         connection.schedule_reload()
 
@@ -160,8 +151,7 @@ class TestConnectionReconnect(TransactionCase):
         )
 
     def test_unchanged_config_keeps_the_same_connection(self):
-        """The other half: without a scheduled reload, the 2-second tick must
-        not churn healthy connections."""
+        """The 2-second tick must not churn healthy connections."""
         connection = self._start()
 
         self.pool.update_config(self._db_config())
@@ -191,7 +181,7 @@ class TestConnectionReconnect(TransactionCase):
 
     @mute_logger(POOL_LOGGER)
     def test_broken_connection_recovers_end_to_end(self):
-        """Failure -> detection -> rebuild, the way a worker cycle runs it."""
+        """Failure -> detection -> rebuild, as a worker cycle runs it."""
         connection = self._start()
         connection.raise_on_process = pika.exceptions.AMQPHeartbeatTimeout()
 

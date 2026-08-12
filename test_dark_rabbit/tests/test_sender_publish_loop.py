@@ -42,7 +42,7 @@ class FakeRegistry:
 
 
 class TestPublishLoop(TransactionCase):
-    """`_publish_events`: which events each ready connection sends, and which
+    """`_publish_events`: what each ready connection sends, and which
     connections are skipped before anything is queried."""
 
     def setUp(self):
@@ -52,8 +52,8 @@ class TestPublishLoop(TransactionCase):
         self.conn_b = self._connection("conn-b")
 
         self.published = []
-        # _publish_events only touches these two attributes of the worker, so
-        # it is built without running the background-service __init__.
+        # _publish_events touches only these two attributes, so the worker is
+        # built without running the background-service __init__.
         self.worker = object.__new__(DarkRabbitSenderWorker)
         self.worker._publish_event = self._record_publish
 
@@ -147,8 +147,8 @@ class TestPublishLoop(TransactionCase):
     # ------------------------------------------------ which connections run
 
     def test_unusable_publisher_is_not_even_queried(self):
-        """The point of the loop shape: a stalled publisher used to cost a
-        query and a batch slot on every single cycle."""
+        """Readiness is decided before the query, so an unusable publisher
+        costs no round trip."""
         self._event(self.conn_a, 1)
 
         with mock.patch.object(self.Event.__class__, "search", autospec=True) as search:
@@ -185,7 +185,7 @@ class TestPublishLoop(TransactionCase):
         self.assertEqual(result.total, 0)
 
     def test_one_stalled_connection_does_not_block_another(self):
-        """Fairness comes from the loop, not from how a batch is divided."""
+        """Fairness comes from querying each connection separately."""
         self._event(self.conn_a, 1)
         b_event = self._event(self.conn_b, 2)
 
@@ -200,9 +200,7 @@ class TestPublishLoop(TransactionCase):
         self.assertEqual(result.total, 1)
 
     def test_no_ready_publishers_reports_nothing_to_do(self):
-        """run_service breaks out and sleeps on total == 0. Previously the
-        events were selected and skipped, so total stayed non-zero and the
-        loop spun on work it could never do."""
+        """run_service breaks out and sleeps on total == 0."""
         self._event(self.conn_a, 1)
 
         result = self._run({self.conn_a.id: FakePublisher(can_send=False)})
@@ -212,8 +210,8 @@ class TestPublishLoop(TransactionCase):
     # ----------------------------------------------------- mid-batch failure
 
     def test_channel_closing_mid_batch_stops_and_counts_the_remainder(self):
-        """Rather than failing every remaining event against a dead channel,
-        stop and let the next cycle retry them."""
+        """The remainder is left for the next cycle, not failed against a
+        dead channel."""
         for offset in range(3):
             self._event(self.conn_a, offset)
         publisher = FakePublisher()
