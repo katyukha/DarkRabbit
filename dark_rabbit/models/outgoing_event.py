@@ -89,8 +89,14 @@ class DarkRabbitOutgoingEvent(models.Model):
         self.env.cr.execute(
             """
             -- Index used by event sender to search for new events to be sent.
-            CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__sender_search__idx
-                 ON dark_rabbit_outgoing_event ("created_at", "timestamp", "id")
+            -- Column order matches sender_worker._publish_events, which
+            -- queries one connection at a time: equality on connection_id
+            -- plus the exact ORDER BY lets the index answer both, so the
+            -- scan stops at the batch limit instead of walking other
+            -- connections' unsent events. Partial, so sent events drop out.
+            CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__sender_search_v2__idx
+                 ON dark_rabbit_outgoing_event
+                    ("connection_id", "created_at", "timestamp", "id")
                  WHERE sent_at IS NULL;
 
             CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__error__idx

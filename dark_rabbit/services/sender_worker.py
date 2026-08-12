@@ -137,49 +137,70 @@ class DarkRabbitSenderWorker(AbstractBackgroundServiceWorker):
         )
         return True
 
+    def _publisher_ready(self, publisher):
+        """Whether ``publisher`` can accept events right now.
+
+        Checked before querying: an unusable publisher must not cost a
+        database round trip.
+        """
+        if not publisher:
+            # Not spawned for this connection yet; may appear on a later cycle
+            return False
+
+        if not publisher.can_send:
+            return False
+
+        if publisher.scheduled_reload:
+            return False
+
+        if publisher.channel.is_closed:
+            publisher.schedule_reload()
+            return False
+
+        return True
+
     def _publish_events(self, env):
-        events = env["dark.rabbit.outgoing.event"].search(
-            [
-                ("sent_at", "=", False),
-                ("connection_id", "in", self._publisher_registry.active_connection_ids),
-            ],
-            order="created_at ASC, timestamp ASC, id ASC",
-            limit=BATCH_PUBLISH,
-        )
-        events_total = len(events)
+        """Publish a batch per ready connection.
+
+        ``PublishResult.total`` counts events attempted, not merely selected,
+        so ``run_service`` reads zero when no publisher is usable and sleeps
+        rather than spinning.
+        """
+        events_total = 0
         events_sent = 0
         events_failed = 0
         events_skipped = 0
-        for event in events:
-            publisher = self._publisher_registry.get(event.connection_id.id)
-            if not publisher:
-                # There is not active publisher for this event. Thus we have to
-                # skip it. May be publisher for this evetn will be spawned later.
-                events_skipped += 1
+
+        for connection_id in self._publisher_registry.active_connection_ids:
+            publisher = self._publisher_registry.get(connection_id)
+            if not self._publisher_ready(publisher):
                 continue
 
-            if not publisher.can_send:
-                events_skipped += 1
-                continue
+            # One connection at a time, never `connection_id IN (...)`: an
+            # IN list cannot yield the global ordering, so PostgreSQL would
+            # sort every matching row instead of stopping at the limit.
+            # Column order here must match sender_search_v2__idx.
+            events = env["dark.rabbit.outgoing.event"].search(
+                [("sent_at", "=", False), ("connection_id", "=", connection_id)],
+                order="created_at ASC, timestamp ASC, id ASC",
+                limit=BATCH_PUBLISH,
+            )
+            events_total += len(events)
 
-            if publisher.scheduled_reload:
-                # Publisher is scheduled for reload, thus do not send events to
-                # that publisher anymore
-                events_skipped += 1
-                continue
+            for index, event in enumerate(events):
+                if publisher.channel.is_closed:
+                    # Channel died mid-batch: stop, so the next cycle retries
+                    # the remainder against a fresh publisher instead of
+                    # failing every event that is left.
+                    publisher.schedule_reload()
+                    events_skipped += len(events) - index
+                    break
 
-            if publisher.channel.is_closed:
-                # If channel connection is closed, then schedule reload of
-                # publisher and skip event
-                publisher.schedule_reload()
-                events_skipped += 1
-                continue
-
-            # Do actual publish of event
-            if self._publish_event(publisher, event):
-                events_sent += 1
-            else:
-                events_failed += 1
+                # Do actual publish of event
+                if self._publish_event(publisher, event):
+                    events_sent += 1
+                else:
+                    events_failed += 1
 
         return PublishResult(events_total, events_sent, events_skipped, events_failed)
 
