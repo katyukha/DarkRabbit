@@ -10,6 +10,9 @@ BASE = datetime.datetime(2026, 1, 1, 0, 0, 0)
 
 
 class FakeChannel:
+    # is_closed must stay mutable: a test flips it part way through a batch.
+    __slots__ = ("is_closed",)
+
     def __init__(self, is_closed=False):
         self.is_closed = is_closed
 
@@ -148,9 +151,7 @@ class TestPublishLoop(TransactionCase):
         query and a batch slot on every single cycle."""
         self._event(self.conn_a, 1)
 
-        with mock.patch.object(
-            self.Event.__class__, "search", autospec=True
-        ) as search:
+        with mock.patch.object(self.Event.__class__, "search", autospec=True) as search:
             result = self._run({self.conn_a.id: FakePublisher(can_send=False)})
 
         search.assert_not_called()
