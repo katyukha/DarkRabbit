@@ -89,8 +89,23 @@ class DarkRabbitOutgoingEvent(models.Model):
         self.env.cr.execute(
             """
             -- Index used by event sender to search for new events to be sent.
-            CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__sender_search__idx
-                 ON dark_rabbit_outgoing_event ("created_at", "timestamp", "id")
+            --
+            -- connection_id leads because the sender queries one connection at
+            -- a time (see services/sender_worker.get_events_to_publish): an
+            -- equality on the leading column plus the exact ORDER BY in the
+            -- remaining ones lets the index answer the filter AND the sort, so
+            -- the scan stops at the batch limit.
+            --
+            -- Without it the sender walked every unsent event of every OTHER
+            -- connection, fetching each from the heap just to read
+            -- connection_id -- measured at 1.1s to return zero rows against a
+            -- 75k backlog on a real database.
+            --
+            -- The partial predicate keeps this tiny (~10MB at 10M events),
+            -- since sent events drop out of it.
+            CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__sender_search_v2__idx
+                 ON dark_rabbit_outgoing_event
+                    ("connection_id", "created_at", "timestamp", "id")
                  WHERE sent_at IS NULL;
 
             CREATE INDEX IF NOT EXISTS dark_rabbit_outgoing_event__error__idx
